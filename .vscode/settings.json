@@ -1,0 +1,8 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=utils"
+    ],
+    "python.linting.flake8Enabled": false,
+}

@@ -1,5 +1,19 @@
 # Python_User-Management
 
+## Aufsetzung Step-by-Step
+
+1. Repo inkl. Submodule durch Eingabe folgender Befehle klonen:
+```bash
+git clone https://github.com/jonbulica99/Python_User-Management
+cd ./Python_User-Management
+git submodule update --init --recursive
+```
+
+2. Pip-Abhängigkeiten installieren (eventuell in virtueller Umgebung):
+```bash
+python3 -m pip install -r requirements.txt
+```
+
 ## Aufgabenstellung und Anforderungen
 
 Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmöglichen, dass die Nutzer automatisiert auf einem Linux-Server angelegt werden. Je nach Ausbausstufe soll mehr als ein Server sowie Gruppe und Nuzter konfiguriert werden.
