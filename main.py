@@ -1,9 +1,15 @@
 from objects.user import User
-from databases.memorydb import MemoryDB
+from databases.filedb import FileDB
 
 def main():
     user = User()
-    db = MemoryDB()
+    db = FileDB("database.fs")
+    root = db.connect()
+
+    #db.add_object(user)
+    db.remove_object(user)
+    db.commit()
+    print(root.items())
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ __version__ = 0.1
 
 class FileDB(BaseDB):
     def __init__(self, file):
-        super().__init__(version=__version__)
+        super().__init__()
         self.path = file
         self.db = ZODB.DB(file)
 
