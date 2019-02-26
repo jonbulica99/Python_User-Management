@@ -14,6 +14,10 @@ git submodule update --init --recursive
 python3 -m pip install -r requirements.txt
 ```
 
+## TODO
+* https://pypi.org/project/sqlacodegen/
+
+
 ## Aufgabenstellung und Anforderungen
 
 Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmöglichen, dass die Nutzer automatisiert auf einem Linux-Server angelegt werden. Je nach Ausbausstufe soll mehr als ein Server sowie Gruppe und Nuzter konfiguriert werden.
