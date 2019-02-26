@@ -1,5 +1,5 @@
 import ZODB
-from Persistence import Persistent
+from persistent import Persistent
 from utils.log import Logger
 
 __version__ = 0.1
@@ -12,4 +12,4 @@ class BaseObject(Persistent):
         self.name = name
         self.version = version
         self.log = Logger(name).get()
-        self.log.debug("Initialized {0} v{1}".format(name, version))
+        self.log.debug("Initialized %s v%s", name, version)

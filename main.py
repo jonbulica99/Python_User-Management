@@ -1,9 +1,10 @@
 from objects.user import User
+from databases.memorydb import MemoryDB
 
 def main():
     user = User()
-    return user
+    db = MemoryDB()
 
 
-if __name__  == "__main__":
+if __name__ == "__main__":
     main()
