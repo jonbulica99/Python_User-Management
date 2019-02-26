@@ -1,0 +1,3 @@
+[submodule "python-utils"]
+	path = python-utils
+	url = https://gitlab.com/jonbulica/python-utils
