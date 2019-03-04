@@ -1,16 +1,19 @@
+from databases.mysql import Mysql
+
+from objects.base import Base
 from objects.user import User
-from databases.filedb import FileDB
+from objects.state import State
+from objects.group  import Group
 
 def main():
-    user = User()
-    db = FileDB("database.fs")
-    root = db.connect()
-
-    #db.add_object(user)
-    db.remove_object(user)
-    db.commit()
-    print(root.items())
-
+    db = Mysql(database="user-manager2", user="root", pwd="", host="localhost")
+    db.create_schema(Base)
+    #users = db.select([User]).fetchone()
+    #print(users)
+    exit(0)
+    db.add_object(user)
+    db.commit_changes()
+   
 
 if __name__ == "__main__":
     main()

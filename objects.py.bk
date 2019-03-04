@@ -1,0 +1,48 @@
+from sqlalchemy import Column, ForeignKey, String, Table
+from sqlalchemy.dialects.mysql import INTEGER
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+metadata = Base.metadata
+
+
+class State(Base):
+    __tablename__ = 'state'
+
+    id = Column(INTEGER(11), primary_key=True)
+    name = Column(String(45), nullable=False)
+
+
+class Group(Base):
+    __tablename__ = 'groups'
+
+    id = Column(INTEGER(11), primary_key=True)
+    parentID = Column(ForeignKey('groups.id'), index=True)
+    stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
+    name = Column(String(45), nullable=False)
+
+    parent = relationship('Group', remote_side=[id])
+    state = relationship('State')
+    users = relationship('User', secondary='groups_has_users')
+
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(INTEGER(11), primary_key=True)
+    stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
+    firstname = Column(String(45), nullable=False)
+    lastname = Column(String(45), nullable=False)
+    username = Column(String(45), nullable=False)
+    password = Column(String(45), nullable=False)
+    publicKey = Column(String(255))
+
+    state = relationship('State')
+
+
+users_groups = Table(
+    'group_has_users', metadata,
+    Column('groups_id', ForeignKey('groups.id'), primary_key=True, nullable=False, index=True),
+    Column('users_id', ForeignKey('users.id'), primary_key=True, nullable=False, index=True)
+)

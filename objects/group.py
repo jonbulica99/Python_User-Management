@@ -1,9 +1,19 @@
-from objects.base import BaseObject
-
-__version__ = 0.1
-__db_name__ = "groups"
+from objects.base import *
 
 
-class Group(BaseObject):
-    def __init__(self):
-        super().__init__(version=__version__, db_name=__db_name__)
+class Group(Base):
+    __tablename__ = 'groups'
+
+    id = Column(Integer, primary_key=True)
+    parentID = Column(ForeignKey('groups.id'), index=True)
+    stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
+    name = Column(String(45), nullable=False)
+
+    parent = relationship('Group', remote_side=[id])
+    state = relationship('State')
+    users = relationship('User', secondary="users_groups")
+
+    def __init__(self, parentID, stateID, name):
+        self.parentID = parentID
+        self.stateID = stateID
+        self.name = name

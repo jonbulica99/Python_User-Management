@@ -16,6 +16,7 @@ python3 -m pip install -r requirements.txt
 
 ## TODO
 * https://pypi.org/project/sqlacodegen/
+* sqlacodegen mysql://root:@localhost/user-manager > test/output.py
 
 
 ## Aufgabenstellung und Anforderungen
