@@ -8,10 +8,9 @@ from objects.group  import Group
 def main():
     db = Mysql(database="user-manager2", user="root", pwd="", host="localhost")
     db.create_schema(Base)
-    #users = db.select([User]).fetchone()
-    #print(users)
-    exit(0)
-    db.add_object(user)
+    users = db.select([State]).fetchall()
+    print(users)
+    db.add_object(State("present"))
     db.commit_changes()
    
 

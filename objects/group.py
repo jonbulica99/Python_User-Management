@@ -11,7 +11,7 @@ class Group(Base):
 
     parent = relationship('Group', remote_side=[id])
     state = relationship('State')
-    users = relationship('User', secondary="users_groups")
+    users = relationship('User', secondary="group_has_users")
 
     def __init__(self, parentID, stateID, name):
         self.parentID = parentID
