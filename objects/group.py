@@ -7,7 +7,7 @@ class Group(Base):
     id = Column(Integer, primary_key=True)
     parentID = Column(ForeignKey('groups.id'), index=True)
     stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
-    name = Column(String(45), nullable=False)
+    name = Column(String(45), unique=True, nullable=False)
 
     parent = relationship('Group', remote_side=[id])
     state = relationship('State')

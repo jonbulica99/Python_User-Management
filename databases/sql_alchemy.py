@@ -66,8 +66,11 @@ class SqlAlchemy(BaseDB):
         self.session.add(obj)
 
     def _remove_object(self, obj):
-        self.session.remove(obj)
+        self.session.delete(obj)
 
     def select(self, *args):
         query = select(*args)
         return self.session.execute(query)
+
+    def select_object(self, obj):
+        return self.session.query(obj)

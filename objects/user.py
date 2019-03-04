@@ -13,7 +13,7 @@ class User(Base):
     stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
     firstname = Column(String(45), nullable=False)
     lastname = Column(String(45), nullable=False)
-    username = Column(String(45), nullable=False)
+    username = Column(String(45), unique=True, nullable=False)
     password = Column(String(45), nullable=False)
     publicKey = Column(String(255))
 
