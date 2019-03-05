@@ -42,12 +42,20 @@ class BaseDB:
         else:
             self.log.error("Cannot insert invalid object: %s", obj)
 
+    def add_objects(self, list):
+        for obj in list:
+            self.add_object(obj)
+
     def remove_object(self, obj):
         if self.verify_object(obj):
             self.log.debug("Removing %s", obj)
             self._remove_object(obj)
         else:
             self.log.error("Cannot remove invalid object: %s", obj)
+    
+    def remove_objects(self, list):
+        for obj in list:
+            self.remove_object(obj)
 
     def commit_changes(self):
         raise NotImplementedError("You should override this method in the child implementation!")

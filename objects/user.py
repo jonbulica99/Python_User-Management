@@ -20,8 +20,8 @@ class User(Base):
     state = relationship('State')
     groups = relationship('Group', secondary="group_has_users")
 
-    def __init__(self, stateID, firstname, lastname, password, publicKey, username=None):
-        self.stateID = stateID
+    def __init__(self, state, firstname, lastname, password, publicKey, username=None):
+        self.stateID = state.id
         self.firstname = firstname
         self.lastname = lastname
         self.password = password
@@ -31,4 +31,4 @@ class User(Base):
     def get_username(self, username):
         if username:
             return username
-        return self.firstname[:1] + self.lastname
+        return (self.firstname[:1] + self.lastname).lower()

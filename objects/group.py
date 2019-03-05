@@ -13,7 +13,8 @@ class Group(Base):
     state = relationship('State')
     users = relationship('User', secondary="group_has_users")
 
-    def __init__(self, parentID, stateID, name):
-        self.parentID = parentID
-        self.stateID = stateID
+    def __init__(self, parent, state, name):
+        if parent:
+            self.parentID = parent.id
+        self.stateID = state.id
         self.name = name
