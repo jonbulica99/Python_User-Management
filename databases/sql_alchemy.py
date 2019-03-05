@@ -8,23 +8,49 @@ from databases.base import BaseDB
 __version__ = 0.1
 
 class SqlAlchemy(BaseDB):
-    def __init__(self, database, dialect, version=__version__):
+    implementation = None
+    def __init__(self, database, dialect=None, implementation=None, version=__version__):
         super().__init__(version=version)
         self.database = database
-        self.dialect = dialect
+        if dialect:
+            self.dialect = dialect
+        else:
+            self.dialect = self.__class__.__name__.lower()
+        if implementation:
+            self.implementation = implementation
         self.engine = None
         self.metadata = None
         self.session = None
 
-    def connect(self, implementation, encoding="utf-8", logging=True):
+    @staticmethod
+    def safeformat(str, **kwargs):
+        class SafeDict(dict):
+            def __missing__(self, key):
+                return '{' + key + '}'
+        replacements = SafeDict(**kwargs)
+        return str.format_map(replacements)
+
+    def __implementation(self):
+        impl = "{dialect}://"
+        if self.implementation:
+            impl += self.implementation
+        if self.database:
+            impl += "/{database}"
+        return self.safeformat(impl, **self.__dict__)
+
+    def connect(self, encoding="utf-8", logging=True):
         self.log.debug("Initializing %s DB engine...", self.name)
-        self.engine = create_engine(implementation, encoding=encoding, echo=logging)
+        engine_impl = self.__implementation()
+        self.log.debug("Engine implementation is %s", engine_impl)
+        self.engine = create_engine(engine_impl, encoding=encoding, echo=logging)
+
         if logging:
             self.__own_logger()
+
         if not database_exists(self.engine.url):
             self.log.warn("Database '%s' not found. Creating it now!", self.database)
             create_database(self.engine.url)
-        #self.metadata = MetaData(bind=self.engine)
+
         self.log.debug("Initializing %s DB session...", self.name)
         DBSession = sessionmaker(bind=self.engine)
         self.session = DBSession()

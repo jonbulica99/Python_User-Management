@@ -11,7 +11,7 @@ class BaseDB:
         self.name = name
         self.version = version
         self.log = Logger(name).get()
-        self.log.debug("Initialized %s v%s", name, version)
+        self.log.debug("Initialized %s DB v%s", name, version)
         self.db = None
 
     def describe(self):
