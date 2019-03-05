@@ -4,13 +4,14 @@ from sqlalchemy.schema import CreateSchema
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import database_exists, create_database
 from databases.base import BaseDB
+from utils.extras import safeformat
 
 __version__ = 0.1
 
 class SqlAlchemy(BaseDB):
     implementation = None
-    def __init__(self, database, dialect=None, implementation=None, version=__version__):
-        super().__init__(version=version)
+    def __init__(self, database, dialect=None, implementation=None, version=__version__, *args, **kwargs):
+        super().__init__(version=version, *args, **kwargs)
         self.database = database
         if dialect:
             self.dialect = dialect
@@ -22,21 +23,13 @@ class SqlAlchemy(BaseDB):
         self.metadata = None
         self.session = None
 
-    @staticmethod
-    def safeformat(str, **kwargs):
-        class SafeDict(dict):
-            def __missing__(self, key):
-                return '{' + key + '}'
-        replacements = SafeDict(**kwargs)
-        return str.format_map(replacements)
-
     def __implementation(self):
         impl = "{dialect}://"
         if self.implementation:
             impl += self.implementation
         if self.database:
             impl += "/{database}"
-        return self.safeformat(impl, **self.__dict__)
+        return safeformat(impl, **self.__dict__)
 
     def connect(self, encoding="utf-8", logging=True):
         self.log.debug("Initializing %s DB engine...", self.name)

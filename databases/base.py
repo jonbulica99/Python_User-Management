@@ -5,7 +5,7 @@ __version__ = 0.2
 
 
 class BaseDB:
-    def __init__(self, name=None, version=__version__):
+    def __init__(self, name=None, version=__version__, *args, **kwargs):
         if not name:
             name = self.__class__.__name__
         self.name = name
