@@ -8,7 +8,7 @@ from objects.state import State
 from objects.group  import Group
 
 from utils.config import Config
-from helpers.db_manager import DatabaseManager
+from helpers.db_manager import DatabaseManager, DbType
 
 class UserManager(object):
     def __init__(self, config):
@@ -36,8 +36,8 @@ def main():
 if __name__ == "__main__":
     # main()
     main_config = Config()
-    manager = DatabaseManager(db_config=main_config.parse_section("database"))
+    manager = DatabaseManager(main_config.parse_section("database"))
 
-    db = manager.create_database("mysql")
+    db = manager.create_database(DbType.MEMORY)
     db.connect()
     db.create_schema(Base)

@@ -15,8 +15,12 @@ python3 -m pip install -r requirements.txt
 ```
 
 ## TODO
-* https://pypi.org/project/sqlacodegen/
-* sqlacodegen mysql://root:@localhost/user-manager > test/output.py
+1. connection protocols (?) > ssh
+    * connection manager
+2. user manager 
+    * https://github.com/ansible/ansible/blob/stable-2.7/lib/ansible/modules/system/user.py ¯\\_(ツ)_/¯
+
+9999999. unittests
 
 
 ## Aufgabenstellung und Anforderungen
