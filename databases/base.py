@@ -1,5 +1,6 @@
 from enum import Enum
 from utils.log import Logger
+from utils.decorators import notimplemented
 
 __version__ = 0.2
 
@@ -17,23 +18,29 @@ class BaseDB:
     def describe(self):
         return self.name
 
+    @notimplemented
     def connect(self):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
     
+    @notimplemented
     def close(self):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
 
+    @notimplemented
     def verify_object(self, obj):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
 
+    @notimplemented
     def _add_object(self, obj):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
 
+    @notimplemented
     def _remove_object(self, obj):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
 
+    @notimplemented
     def select(self, *args):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
 
     def add_object(self, obj):
         if self.verify_object(obj):
@@ -57,8 +64,10 @@ class BaseDB:
         for obj in list:
             self.remove_object(obj)
 
+    @notimplemented
     def commit_changes(self):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass
 
+    @notimplemented
     def rollback_changes(self):
-        raise NotImplementedError("You should override this method in the child implementation!")
+        pass

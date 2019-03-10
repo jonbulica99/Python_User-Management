@@ -5,7 +5,8 @@ from databases.memory import Memory
 from objects.base import Base
 from objects.user import User
 from objects.state import State
-from objects.group  import Group
+from objects.group import Group
+from objects.host import Host
 
 from utils.config import Config
 from helpers.db_manager import DatabaseManager, DbType
