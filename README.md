@@ -23,6 +23,13 @@ python3 -m pip install -r requirements.txt
 9999999. unittests
 
 
+## Unit-Tests
+Diese können mittels folgenden Befehles ausgeführt werden:
+```bash
+python3 -m unittests.test_backend
+```
+Hierfür wird `unittest` benötigt.
+
 ## Aufgabenstellung und Anforderungen
 
 Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmöglichen, dass die Nutzer automatisiert auf einem Linux-Server angelegt werden. Je nach Ausbausstufe soll mehr als ein Server sowie Gruppe und Nuzter konfiguriert werden.
