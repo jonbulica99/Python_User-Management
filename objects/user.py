@@ -20,13 +20,15 @@ class User(Base):
     state = relationship('State')
     groups = relationship('Group', secondary="group_has_users")
 
-    def __init__(self, state, firstname, lastname, password, publicKey, username=None):
+    def __init__(self, state, firstname, lastname, password, publicKey, username=None, groups=None):
+        self.state = state
         self.stateID = state.id
         self.firstname = firstname
         self.lastname = lastname
         self.password = password
         self.publicKey = publicKey
         self.username = self.get_username(username)
+        self.groups = groups
 
     def get_username(self, username):
         if username:
