@@ -1,20 +1,8 @@
 from utils.log import Logger
 from utils.decorators import notimplemented
-
 from objects import *
 
 __version__ = 0.1
-
-
-class MethodBackend:
-    add_user = None
-    del_user = None
-    en_user = None
-    dis_user = None
-    add_user_group = None
-    del_user_group = None
-    add_group = None
-    del_group = None
 
 
 class BaseBackend:
@@ -36,9 +24,9 @@ class BaseBackend:
         self.log.debug("Closing connection to %s backend v%s.", self.name, self.version)
 
     @notimplemented
-    def sync_user(self, user: user.User):
+    def sync_user(self, user):
         pass
 
     @notimplemented
-    def sync_group(self, group: group.Group):
+    def sync_group(self, group):
         pass

@@ -1,4 +1,4 @@
-from backends.base import BaseBackend, MethodBackend
+from backends.backend import BaseBackend
 
 import paramiko
 
@@ -7,15 +7,7 @@ __version__ = 0.1
 
 class SshBackend(BaseBackend):
     look_for_keys = True
-    
-    class Unix(MethodBackend):
-        pass
-
-    class Windows(MethodBackend):
-        pass
-
-
-    def __init__(self, host: host.Host, user: user.User, *args, **kwargs):
+    def __init__(self, host, user, *args, **kwargs):
         super().__init__(version=__version__, *args, **kwargs)
         self.host = host
         self.user = user
@@ -43,4 +35,3 @@ class SshBackend(BaseBackend):
     def sync_user(self, user):
         super().sync_user(user)
         # TODO continue here
-        
