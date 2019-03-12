@@ -12,7 +12,7 @@ class UserAdd(BaseCommand):
         self.last_name = last_name
         self.password = password
         if not username:
-            username = first_name.lower() + last_name.lower()
+            username = (first_name + last_name).lower()
         self.username = username
         self.groups = groups
         self.active = active
@@ -22,7 +22,7 @@ class UserAdd(BaseCommand):
     @staticmethod
     def from_user(user: User):
         return UserAdd(first_name=user.firstname, last_name=user.lastname, password=user.password,
-            username=user.username, groups=user.groups, active=(user.state.name == 'active'))
+            username=user.username, groups=user.groups, active=(user.state.name == 'present'))
 
     def get_error_messages(self):
         return {
@@ -47,7 +47,9 @@ class UserAdd(BaseCommand):
         args["--comment"] = "{} {}".format(self.first_name, self.last_name)
 
         # check if we should disable user
-        if not self.active:
+        if self.active:
+            args["--shell"] = "/bin/bash"
+        else:
             args["--shell"] = "/bin/nologin"
 
         # set password
@@ -55,7 +57,10 @@ class UserAdd(BaseCommand):
 
         # set groups; if none are provided, we let the system decide
         if self.groups:
-            args["--groups"] = ','.join([self.groups])
+            grps = self.groups
+            if not isinstance(self.groups, list):
+                grps = [self.groups]
+            args["--groups"] = ','.join(grps)
 
         return cmd.format(options=self.parse_opts(args), username=self.username)
 

@@ -46,14 +46,13 @@ class BaseCommand:
     def get_template(self):
         pass
 
+    @notimplemented
     def get_error_messages(self):
-        return {}
+        pass
 
-    @expect(KeyError, "An error occured!")
+    @expect(IndexError, "An error occured!")
     def get_error_message(self, exit_code):
-        if exit_code:
-            return self.get_error_messages()[exit_code]
-        return "Successfully ran {}".format(self.cmd)
+        return list(self.get_error_messages().values())[exit_code]
         
     @staticmethod
     def parse_opts(opts):

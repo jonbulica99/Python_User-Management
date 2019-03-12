@@ -4,6 +4,9 @@ from databases.memory import Memory
 
 from objects import *
 
+from backends.ssh.main import SshBackend
+from backends.ssh.commands import *
+
 from utils.config import Config
 from helpers.db_manager import DatabaseManager, DbType
 
@@ -29,8 +32,22 @@ def main():
     db.add_object(user)
     db.commit_changes()
 
+def testing():
+    ssh_jbu = User(State('present'), 'Jon', 'Bulica', 'Shqiperia123', [])
+    ssh_jbu.username = 'pi'
+    localhost = Host('pi', '172.0.0.2', 22, ssh_jbu)
+    ssh = SshBackend(host=localhost, user=ssh_jbu)
+    ssh.connect()
+    ssh.become(ssh.BecomeMethod.SUDO, ssh_jbu.password)
+
+    add_user = UserAdd.from_user(ssh_jbu)
+    add_user.username = 'ssh_jbu'
+    ssh.run(add_user)
+    exit(0)
+
 
 if __name__ == "__main__":
+    testing()
     # main()
     main_config = Config()
     manager = DatabaseManager(main_config.parse_section("database"))

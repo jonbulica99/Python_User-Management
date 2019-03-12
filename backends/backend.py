@@ -15,18 +15,8 @@ class BaseBackend:
         self.log.debug("Initialized %s backend v%s", name, version)
         self.db = None
 
-    @notimplemented
     def connect(self):
         self.log.debug("Connecting to %s backend v%s.", self.name, self.version)
 
-    @notimplemented
     def close(self):
         self.log.debug("Closing connection to %s backend v%s.", self.name, self.version)
-
-    @notimplemented
-    def sync_user(self, user):
-        pass
-
-    @notimplemented
-    def sync_group(self, group):
-        pass
