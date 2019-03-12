@@ -28,7 +28,7 @@ Diese können mittels folgenden Befehles ausgeführt werden:
 ```bash
 python3 -m unittests.test_backend
 ```
-Hierfür wird `unittest` benötigt.
+Hierfür wird das Python-Modul `unittest` benötigt.
 
 ## Aufgabenstellung und Anforderungen
 
@@ -39,7 +39,7 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 
 - [x] Es existiert eine Datenbank, in der Nutzer verwaltet werden.
 - [ ] Die Nutzer der Datenbank werden automatisiert in das Linux-Zielsystem eingepflegt. 
-- [ ] Für jeden Nutzer wird ein Standardpasswort vergeben. 
+- [x] Für jeden Nutzer wird ein Standardpasswort vergeben. 
 - [x] Der Nutzer wird beim ersten Login aufgefordert, das Passwort zu ändern.
 - [ ] Sie haben mindestens drei automatisierte Unit-Tests.  
 - [x] Sie verwenden GIT (oder ein anderes VCS).
@@ -52,7 +52,7 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 - [x] Sie verwenden verschiedene Module.
 - [x] Sie verfolgen einen OOP Ansatz.
 - [ ] Sie können einen Nutzer auf mindestens zwei Systemen ausrollen.
-- [ ] Ein Nutzer kann einer Gruppe zugeordnet werden. 
+- [x] Ein Nutzer kann einer Gruppe zugeordnet werden. 
 - [ ] Vor dem Anlegen eines Nutzers oder einer Gruppe wird geprüft, ob der Nutzer oder die Gruppe existiert. Falls der Nutzer oder die Gruppe existiert, wird nicht versucht, den Nutzer oder die Gruppe anzulegen.
 - [ ] Sie haben mindestens fünf automatisierte Unit-Tests.
 

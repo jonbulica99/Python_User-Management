@@ -1,12 +1,12 @@
 from backends.command import BaseCommand
 from objects.user import User
-
-import crypt
+from utils.decorators import expect
 
 __supported_os__ = ["Linux"]
 
 
 class UserAdd(BaseCommand):
+    @expect(ModuleNotFoundError, "Only UNIX systems support crypt!")
     def __init__(self, first_name, last_name, password, username=None, groups=None, active=True, change_pwd_on_first_login=True):
         self.first_name = first_name
         self.last_name = last_name
@@ -17,6 +17,7 @@ class UserAdd(BaseCommand):
         self.groups = groups
         self.active = active
         self.change_pwd_on_first_login = change_pwd_on_first_login
+        import crypt
         self.salt = crypt.mksalt(crypt.METHOD_SHA512)
         super().__init__(__supported_os__)
 

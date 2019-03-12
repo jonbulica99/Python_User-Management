@@ -5,7 +5,7 @@ __supported_os__ = ["Linux"]
 
 
 class UserDel(BaseCommand):
-    def __init__(self, username, force=False, remove_home=False):
+    def __init__(self, username, force=False, remove_home=True):
         self.username = username
         self.force = force
         self.remove_home = remove_home

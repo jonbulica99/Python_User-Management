@@ -33,9 +33,9 @@ def main():
     db.commit_changes()
 
 def testing():
-    ssh_jbu = User(State('present'), 'Jon', 'Bulica', 'Shqiperia123', [])
+    ssh_jbu = User(State('present'), 'Jon', 'Bulica', 'hunter2', [])
     ssh_jbu.username = 'pi'
-    localhost = Host('pi', '172.0.0.2', 22, ssh_jbu)
+    localhost = Host('pi', '172.0.0.2', ssh_jbu)
     ssh = SshBackend(host=localhost, user=ssh_jbu)
     ssh.connect()
     ssh.become(ssh.BecomeMethod.SUDO, ssh_jbu.password)
@@ -47,11 +47,13 @@ def testing():
 
 
 if __name__ == "__main__":
-    testing()
+    # testing()
     # main()
     main_config = Config()
-    manager = DatabaseManager(main_config.parse_section("database"))
+    manager = DatabaseManager(main_config)
 
-    db = manager.create_database(DbType.MEMORY)
+    db = manager.create_database()
     db.connect()
     db.create_schema(Base)
+    
+    manager.insert_default_values()

@@ -2,8 +2,10 @@ from databases.sqlite import Sqlite
 
 __version__ = 0.1
 
+
 class Memory(Sqlite):
     def __init__(self, *args, **kwargs):
+        kwargs.pop("database")
         super().__init__(database="", version=__version__, *args, **kwargs)
         self.check_if_enough_memory()
 
@@ -12,10 +14,13 @@ class Memory(Sqlite):
             import psutil
             mem_percent = psutil.virtual_memory().get("percent")
             if mem_percent > crit_percent:
-                self.log.crit("Not enough system memory left (%s percent is being used).", mem_percent)
+                self.log.crit(
+                    "Not enough system memory left (%s percent is being used).", mem_percent)
                 del self
             elif mem_percent > warn_percent:
-                self.log.warn("The OS is running out of memory. If the kernel kills this process, you data will disappear forever! (%s percent is being used).", mem_percent)
+                self.log.warn(
+                    "The OS is running out of memory. If the kernel kills this process, you data will disappear forever! (%s percent is being used).", mem_percent)
         except ModuleNotFoundError as e:
-            self.log.warn("Module psutil not found. Cannot check system memory before creating memory DB.")
+            self.log.warn(
+                "Module psutil not found. Cannot check system memory before creating memory DB.")
         return default

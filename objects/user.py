@@ -1,11 +1,5 @@
 from objects.base import *
 
-group_has_users = Table(
-    'group_has_users', Base.metadata,
-    Column('group_id', ForeignKey('groups.id'), primary_key=True, nullable=False, index=True),
-    Column('user_id', ForeignKey('users.id'), primary_key=True, nullable=False, index=True)
-)
-
 class User(Base):
     __tablename__ = 'users'
 
@@ -20,7 +14,7 @@ class User(Base):
     state = relationship('State')
     groups = relationship('Group', secondary="group_has_users")
 
-    def __init__(self, state, firstname, lastname, password, publicKey, username=None):
+    def __init__(self, state, firstname, lastname, password, publicKey=None, username=None):
         self.state = state
         self.stateID = state.id
         self.firstname = firstname

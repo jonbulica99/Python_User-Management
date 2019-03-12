@@ -8,6 +8,7 @@ from utils.extras import safeformat
 
 __version__ = 0.1
 
+
 class SqlAlchemy(BaseDB):
     implementation = None
     def __init__(self, database, dialect=None, implementation=None, version=__version__, *args, **kwargs):

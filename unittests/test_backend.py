@@ -12,7 +12,6 @@ class SshBackendTests(unittest.TestCase):
 
 
 class SshCommandTests(unittest.TestCase):
-    @expect(ModuleNotFoundError, "Only UNIX systems support crypt!")
     def test_useradd(self):
         from backends.ssh.commands.useradd import UserAdd
         user = UserAdd(first_name="Max", last_name="Mustermann",
