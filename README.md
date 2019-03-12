@@ -48,9 +48,9 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 
 ### Should have
 
-- [ ] Es existiert eine Datenbank in welcher Nutzer, Gruppen und Server verwaltet werden.
-- [ ] Sie verwenden verschiedene Module.
-- [ ] Sie verfolgen einen OOP Ansatz.
+- [x] Es existiert eine Datenbank in welcher Nutzer, Gruppen und Server verwaltet werden.
+- [x] Sie verwenden verschiedene Module.
+- [x] Sie verfolgen einen OOP Ansatz.
 - [ ] Sie können einen Nutzer auf mindestens zwei Systemen ausrollen.
 - [ ] Ein Nutzer kann einer Gruppe zugeordnet werden. 
 - [ ] Vor dem Anlegen eines Nutzers oder einer Gruppe wird geprüft, ob der Nutzer oder die Gruppe existiert. Falls der Nutzer oder die Gruppe existiert, wird nicht versucht, den Nutzer oder die Gruppe anzulegen.
