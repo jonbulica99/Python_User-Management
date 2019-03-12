@@ -37,13 +37,13 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 
 ### Must have
 
-- [ ] Es existiert eine Datenbank, in der Nutzer verwaltet werden.
+- [x] Es existiert eine Datenbank, in der Nutzer verwaltet werden.
 - [ ] Die Nutzer der Datenbank werden automatisiert in das Linux-Zielsystem eingepflegt. 
 - [ ] Für jeden Nutzer wird ein Standardpasswort vergeben. 
-- [ ] Der Nutzer wird beim ersten Login aufgefordert, das Passwort zu ändern.
+- [x] Der Nutzer wird beim ersten Login aufgefordert, das Passwort zu ändern.
 - [ ] Sie haben mindestens drei automatisierte Unit-Tests.  
-- [ ] Sie verwenden GIT (oder ein anderes VCS).
-- [ ] Sie nutzen Logging.
+- [x] Sie verwenden GIT (oder ein anderes VCS).
+- [x] Sie nutzen Logging.
 
 
 ### Should have

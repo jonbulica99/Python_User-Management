@@ -7,7 +7,7 @@ __supported_os__ = ["Linux"]
 
 
 class UserAdd(BaseCommand):
-    def __init__(self, first_name, last_name, password, username=None, groups=None, active=True):
+    def __init__(self, first_name, last_name, password, username=None, groups=None, active=True, change_pwd_on_first_login=True):
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
@@ -16,6 +16,7 @@ class UserAdd(BaseCommand):
         self.username = username
         self.groups = groups
         self.active = active
+        self.change_pwd_on_first_login = change_pwd_on_first_login
         self.salt = crypt.mksalt(crypt.METHOD_SHA512)
         super().__init__(__supported_os__)
 
@@ -62,7 +63,11 @@ class UserAdd(BaseCommand):
                 grps = [self.groups]
             args["--groups"] = ','.join(grps)
 
-        return cmd.format(options=self.parse_opts(args), username=self.username)
+        out = cmd.format(options=self.parse_opts(args), username=self.username)
+        if self.change_pwd_on_first_login:
+            # https://unix.stackexchange.com/questions/173708/how-do-i-force-a-user-to-change-a-password-at-the-first-time-login-using-ssh
+            out += " && chage -d 0 {username}".format(username=self.username)
+        return out
 
     def get_encrypted_password(self, password):
         return crypt.crypt(password, self.salt)
