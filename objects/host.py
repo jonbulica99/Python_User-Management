@@ -12,7 +12,7 @@ class Host(Base):
 
     users = relationship('User')
 
-    def __init__(self, name, address, user, port=None):
+    def __init__(self, name, address, user, port):
         self.name = name
         self.address = address
         self.port = port

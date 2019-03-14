@@ -18,6 +18,7 @@ class UserAdd(BaseCommand):
         self.active = active
         self.change_pwd_on_first_login = change_pwd_on_first_login
         import crypt
+        self._crypt = crypt
         self.salt = crypt.mksalt(crypt.METHOD_SHA512)
         super().__init__(__supported_os__)
 
@@ -71,4 +72,4 @@ class UserAdd(BaseCommand):
         return out
 
     def get_encrypted_password(self, password):
-        return crypt.crypt(password, self.salt)
+        return self._crypt.crypt(password, self.salt)
