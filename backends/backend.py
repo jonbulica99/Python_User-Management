@@ -13,7 +13,7 @@ class BaseBackend:
         self.version = version
         self.log = Logger(name).get()
         self.log.debug("Initialized %s backend v%s", name, version)
-        self.db = None
+        self.connection = None
 
     def connect(self):
         self.log.debug("Connecting to %s backend v%s.", self.name, self.version)

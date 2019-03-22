@@ -62,13 +62,3 @@ class BaseCommand:
             if value:
                 ret.append(value)
         return ' '.join("'{}'".format(i) for i in ret)
-
-
-    add_user = None
-    del_user = None
-    en_user = None
-    dis_user = None
-    add_user_group = None
-    del_user_group = None
-    add_group = None
-    del_group = None
