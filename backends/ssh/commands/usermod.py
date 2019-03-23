@@ -4,7 +4,7 @@ __supported_os__ = ["Linux"]
 
 
 class UserMod(UserAdd):
-    def __init__(self, first_name, last_name, password, username=None, groups=None, active=True):
+    def __init__(self, first_name, last_name, password, username=None, groups=None, active=True, pubkey=None):
         super().__init__(first_name, last_name, password, username, groups, active)
 
     def get_template(self):

@@ -29,10 +29,15 @@ if __name__ == "__main__":
 
     hosts = db.select_object(Host).filter(~Host.name.contains('localhost')).all()
     users = db.select_object(User).all()
+    groups = db.select_object(Group).all()
     for host in hosts:
         ssh = SshBackend(host)
         ssh.connect()
         user_manager = UserManager(backend=ssh)
+
+        for group in groups:
+            user_manager.handle_group(group)
+
         for user in users:
             user_manager.handle_user(user)
 
