@@ -15,8 +15,7 @@ class UserCheck(BaseCommand):
 
     def get_error_messages(self):
         return {
-            0: "Success",
-            1: "Can't update password file. Are you root?"
+            0: "Success"
         }
 
     def get_template(self):
