@@ -10,10 +10,13 @@ class Host(Base):
     port = Column(Integer)
     userID = Column(ForeignKey('users.id'), nullable=False, index=True)
 
-    users = relationship('User')
+    user = relationship('User')
 
     def __init__(self, name, address, user, port=22):
         self.name = name
         self.address = address
         self.port = port
         self.userID = user.id
+
+    def __repr__(self):
+        return "Host({}, {})".format(self.name, self.address)

@@ -18,3 +18,6 @@ class Group(Base):
             self.parentID = parent.id
         self.stateID = state.id
         self.name = name
+
+    def __repr__(self):
+        return "Group({})".format(self.name)

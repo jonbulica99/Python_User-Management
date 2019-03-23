@@ -13,3 +13,6 @@ class UserGroupLink(Base):
     def __init__(self, user, group):
         self.userid = user.id
         self.groupid = group.id
+
+    def __repr__(self):
+        return "UserGroupLink({} <=> {})".format(self.user, self.group)

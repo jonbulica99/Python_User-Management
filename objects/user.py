@@ -27,3 +27,6 @@ class User(Base):
         if username:
             return username
         return (self.firstname + self.lastname).lower()
+
+    def __repr__(self):
+        return "User({})".format(self.username)
