@@ -63,7 +63,7 @@ class SqlAlchemy(BaseDB):
 
     def __own_logger(self):
         import logging
-        for logger_name in ["sqlalchemy", "sqlalchemy.engine.base.Engine"]:
+        for logger_name in ["sqlalchemy.engine.base.Engine"]:
             logger = logging.getLogger(logger_name)
             logger.setLevel(self.log.level)
             for handler in logger.handlers:
