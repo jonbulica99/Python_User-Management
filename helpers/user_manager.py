@@ -10,39 +10,40 @@ class UserManager:
         exit_code, stdout, _ = self.backend.run(UserCheck.from_user(user), sudo=True)
         if exit_code:
             return False
-        self.log.warn("User '{.username}' (id={}) exists already.".format(user, int(stdout)))
+        self.log.debug("User '{.username}' (id={}) exists already.".format(user, int(stdout)))
         return True
 
     def add_user(self, user):
         if not self.user_exists(user):
-            # add groups if any
-            for group in user.groups:
-                self.add_group(group)
-            # then add the actual user
             return self.backend.run(UserAdd.from_user(user), sudo=True)
+        self.log.warn("Won't add user '{.username}' because it already exists.".format(user))
   
     def remove_user(self, user):
         if self.user_exists(user):
             return self.backend.run(UserDel.from_user(user), sudo=True)
+        self.log.warn("Cannot remove inexistent user '{.username}'.".format(user))
     
     def modify_user(self, user):
         if self.user_exists(user):
             return self.backend.run(UserMod.from_user(user), sudo=True)
+        self.log.warn("Cannot modify inexistent user '{.username}'.".format(user))
 
     def group_exists(self, group):
         exit_code, stdout, _ = self.backend.run(GroupCheck.from_group(group), sudo=True)
         if exit_code:
             return False
-        self.log.warn("Group '{.name}' exists already.".format(group))
+        self.log.debug("Group '{.name}' exists already.".format(group))
         return True
 
     def add_group(self, group):
         if not self.group_exists(group):
             return self.backend.run(GroupAdd.from_group(group), sudo=True)
+        self.log.warn("Won't add group '{.name}' because it already exists.".format(group))
 
     def remove_group(self, group):
         if self.group_exists(group):
             return self.backend.run(GroupDel.from_group(group), sudo=True)
+        self.log.warn("Cannot remove inexistent group '{.name}'.".format(group))
 
     def handle_user(self, user):
         if user.state.name == 'present':
