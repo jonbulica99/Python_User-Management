@@ -63,7 +63,7 @@ class UserAdd(BaseCommand):
             grps = self.groups
             if not isinstance(self.groups, list):
                 grps = [self.groups]
-            args["--groups"] = ','.join(grps)
+            args["--groups"] = ','.join(g.name for g in grps)
 
         out = cmd.format(options=self.parse_opts(args), username=self.username)
         if self.change_pwd_on_first_login:
