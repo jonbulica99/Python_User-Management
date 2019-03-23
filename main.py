@@ -34,6 +34,6 @@ if __name__ == "__main__":
         ssh.connect()
         user_manager = UserManager(backend=ssh)
         for user in users:
-            user_manager.add_user(user)
+            user_manager.handle_user(user)
 
     # db.commit_changes()
