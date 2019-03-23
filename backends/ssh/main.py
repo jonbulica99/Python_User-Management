@@ -15,9 +15,11 @@ class SshBackend(BaseBackend):
 
     look_for_keys = True
 
-    def __init__(self, host, user, *args, **kwargs):
+    def __init__(self, host, user=None, *args, **kwargs):
         super().__init__(version=__version__, *args, **kwargs)
         self.host = host
+        if not user:
+            user = host.user
         self.user = user
         self.config = Config(
             # sudo is handled by fabric itself
@@ -67,15 +69,20 @@ class SshBackend(BaseBackend):
             self.log.debug("stderr => %s", stderr)
         if exit_code:
             self.log.error("Error [%s]: %s", exit_code, error_msg)
-        return stdout
+        return exit_code, stdout, stderr
 
     def __run(self, cmd, sudo=False):
         if self.connection:
-            self.log.info("Executing: '%s'", cmd)
-            if sudo:
-                out = self.connection.sudo(cmd, warn=True)
-            else:
-                out = self.connection.run(cmd, warn=True)
+            for command in cmd.split('&&'):
+                # remove trailing and leading whitespace
+                command = command.strip()
+                self.log.info("Executing: '%s'", command)
+                if sudo:
+                    out = self.connection.sudo(command, warn=True)
+                else:
+                    out = self.connection.run(command, warn=True)
+                if out.return_code:
+                    break # If there are any errors, stop the execution
             return out.return_code, out.stdout, out.stderr
 
     def close(self):
