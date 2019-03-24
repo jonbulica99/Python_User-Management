@@ -54,7 +54,7 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 - [x] Sie können einen Nutzer auf mindestens zwei Systemen ausrollen.
 - [x] Ein Nutzer kann einer Gruppe zugeordnet werden. 
 - [x] Vor dem Anlegen eines Nutzers oder einer Gruppe wird geprüft, ob der Nutzer oder die Gruppe existiert. Falls der Nutzer oder die Gruppe existiert, wird nicht versucht, den Nutzer oder die Gruppe anzulegen.
-- [ ] Sie haben mindestens fünf automatisierte Unit-Tests.
+- [x] Sie haben mindestens fünf automatisierte Unit-Tests.
 
 
 ### Could have

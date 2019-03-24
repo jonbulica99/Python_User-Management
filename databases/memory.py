@@ -18,9 +18,9 @@ class Memory(Sqlite):
                     "Not enough system memory left (%s percent is being used).", mem_percent)
                 del self
             elif mem_percent > warn_percent:
-                self.log.warn(
+                self.log.warning(
                     "The OS is running out of memory. If the kernel kills this process, you data will disappear forever! (%s percent is being used).", mem_percent)
         except ModuleNotFoundError as e:
-            self.log.warn(
+            self.log.warning(
                 "Module psutil not found. Cannot check system memory before creating memory DB.")
         return default
