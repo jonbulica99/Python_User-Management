@@ -54,7 +54,7 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 - [x] Sie können einen Nutzer auf mindestens zwei Systemen ausrollen.
 - [x] Ein Nutzer kann einer Gruppe zugeordnet werden. 
 - [x] Vor dem Anlegen eines Nutzers oder einer Gruppe wird geprüft, ob der Nutzer oder die Gruppe existiert. Falls der Nutzer oder die Gruppe existiert, wird nicht versucht, den Nutzer oder die Gruppe anzulegen.
-- [ ] Sie haben mindestens fünf automatisierte Unit-Tests.
+- [x] Sie haben mindestens fünf automatisierte Unit-Tests.
 
 
 ### Could have
@@ -62,4 +62,4 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 - [x] Nutzer haben einen Status („Present“, „Deactivatet“,  „Deleted“). Entsprechend dem Status ist auf den Zielsystemen der Nutzer vorhanden, deaktiviert oder gelöscht. Beim Löschen soll auch das Homeverzeichnis des Users gelöscht werden.
 - [x] Die öffentlichen SSH-Keys der Nutzer sind in der Datenbank vorhanden und werden beim Anlegen des Nutzers als "authorized keys" auf dem Zielsystem gespeichert.
 - [ ] Die Tests werden automatisiert in einer Continous Integration Umgebung ausgeführt.
-- [ ] Sie haben einen Integrationstest geschrieben, der z. B. das Linuxsystem oder die Datenbank „mockt“.
+- [x] Sie haben einen Integrationstest geschrieben, der z. B. das Linuxsystem oder die Datenbank „mockt“.

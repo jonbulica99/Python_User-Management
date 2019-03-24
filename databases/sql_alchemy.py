@@ -59,7 +59,7 @@ class SqlAlchemy(BaseDB):
             self.session.close()
 
     def create_schema(self, base):
-        base.metadata.create_all(self.engine)
+        return base.metadata.create_all(self.engine)
 
     def __own_logger(self):
         import logging
