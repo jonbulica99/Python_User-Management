@@ -20,3 +20,13 @@ class Host(Base):
 
     def __repr__(self):
         return "Host({}, {})".format(self.name, self.address)
+
+    def as_dict(self, joins=True):
+        out = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        if joins:
+            out.update({
+                "joins": {
+                    "user": self.user.as_dict()
+                }
+            })
+        return out

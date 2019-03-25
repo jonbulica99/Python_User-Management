@@ -1,5 +1,6 @@
 from objects.base import *
 
+
 class User(Base):
     __tablename__ = 'users'
 
@@ -30,3 +31,14 @@ class User(Base):
 
     def __repr__(self):
         return "User({})".format(self.username)
+
+    def as_dict(self, joins=True):
+        out = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        if joins:
+            out.update({
+                "joins": {
+                    "state": self.state.name,
+                    "groups": [group.name for group in self.groups]
+                }
+            })
+        return out
