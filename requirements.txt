@@ -1,3 +1,5 @@
 sqlalchemy
 sqlalchemy_utils
 fabric
+flask
+flask_restful

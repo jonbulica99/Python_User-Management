@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from objects import *
 
 from backends.ssh.main import SshBackend
@@ -7,9 +8,19 @@ from utils.config import Config
 from helpers.user_manager import UserManager
 from helpers.db_manager import DatabaseManager, DbType
 
+from flask import Flask
+from flask_restful import Resource, Api, reqparse
+
+
+app = Flask(__name__)
+
 
 if __name__ == "__main__":
     main_config = Config()
+    app.run(**main_config.parse_section("frontend"))
+
+    exit(0)
+
     manager = DatabaseManager(main_config)
 
     db = manager.create_database()
