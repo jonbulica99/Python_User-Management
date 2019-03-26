@@ -15,7 +15,7 @@ class User(Base):
     state = relationship('State')
     groups = relationship('Group', secondary="group_has_users")
 
-    def __init__(self, state, firstname, lastname, password, publicKey=None, username=None):
+    def __init__(self, state, firstname, lastname, password, publicKey=None, username=None, *args, **kwargs):
         self.state = state
         self.stateID = state.id
         self.firstname = firstname
@@ -38,7 +38,7 @@ class User(Base):
             out.update({
                 "joins": {
                     "state": self.state.name,
-                    "groups": [group.name for group in self.groups]
+                    "groups": [{'id': group.id, 'name': group.name} for group in self.groups]
                 }
             })
         return out

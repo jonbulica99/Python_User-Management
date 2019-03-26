@@ -73,7 +73,12 @@ class SqlAlchemy(BaseDB):
 
     def commit_changes(self):
         self.log.info("Commiting all pending changes...")
-        self.session.commit()
+        try:
+            self.session.commit()
+        except Exception as e:
+            self.log.error("Fatal error occured. Rolling back to ensure DB consistency. \n %s", e)
+            self.session.rollback()
+            raise e
 
     def rollback_changes(self):
         self.log.info("Rolling back all pending changes...")

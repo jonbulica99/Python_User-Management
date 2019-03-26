@@ -19,6 +19,11 @@ export default new Router({
       component: () => import('./views/Hosts.vue')
     },
     {
+      path: '/groups',
+      name: 'groups',
+      component: () => import('./views/Groups.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('./views/About.vue')

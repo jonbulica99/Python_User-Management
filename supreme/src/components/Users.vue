@@ -4,11 +4,14 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Vorname</th>
-          <th>Nachname</th>
+          <th>First name</th>
+          <th>Last name</th>
           <th>Username</th>
           <th>Password</th>
-          <th>Public-Key</th>
+          <th>Groups</th>
+          <th>State</th>
+          <th>Public Key</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -19,7 +22,22 @@
             <a v-bind:href="user_url + user.username">{{ user.username }}</a>
           </td>
           <td>{{ user.password }}</td>
+          <td>
+            <span v-for="group in user.joins.groups">
+              <a class="badge badge-secondary" v-bind:href="group_url + group.id">{{ group.name }}</a>
+              <span>&nbsp;</span>
+            </span>
+          </td>
+          <td>{{ user.joins.state }}</td>
           <td>{{ user.publicKey }}</td>
+          <td class="actions">
+            <a class="btn btn-primary" v-on:click="editUser(user)">
+              <edit-icon></edit-icon>
+            </a>
+            <a class="btn btn-danger" v-on:click="confirmDelete(user)">
+              <delete-icon></delete-icon>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -28,7 +46,8 @@
 
 <script>
 import axios from "axios";
-import { Endpoints } from "../variables.js";
+import { EventBus } from "@/events.js";
+import { Endpoints } from "@/variables.js";
 
 export default {
   name: "users",
@@ -38,21 +57,44 @@ export default {
   data() {
     return {
       users: [],
-      user_url: Endpoints.USERS
+      user_url: Endpoints.USERS,
+      group_url: Endpoints.GROUPS
     };
   },
-  created: function() {
-    axios.get(this.user_url + 'all').then(response => {
-      this.users = response.data;
-    });
-    setInterval(() => {
-      axios.get(this.user_url + 'all').then(response => {
+  mounted() {
+    EventBus.$on("fetchUsers", () => {
+      setTimeout(() => this.fetchUsers(), 1000);
+    })
+  },
+  methods: {
+    editUser(user) {
+      EventBus.$emit("editUser", user);
+    },
+    confirmDelete(user) {
+      this.$dialog
+        .confirm("Do you really want to delete " + user.username + "?")
+        .then(function() {
+          EventBus.$emit("deleteUser", user);
+        })
+        .catch(function() {
+          console.log("User delete aborted.");
+        });
+    },
+    fetchUsers() {
+      axios.get(this.user_url + "all").then(response => {
         this.users = response.data;
       });
-    }, 3600000);
+    }
+  },
+  created: function() {
+    this.fetchUsers();
   }
 };
 </script>
 
 <style scoped>
+.actions a {
+  color: white !important;
+  margin-left: 5px;
+}
 </style>

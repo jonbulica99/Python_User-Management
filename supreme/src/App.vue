@@ -27,5 +27,19 @@
 </template>
 
 <style>
+  @font-face {
+    font-family: "vSupreme";
+    src: url("assets/FuturaStd-HeavyOblique.otf");
+  }
 
+  a.navbar-brand {
+    font-family: vSupreme;
+    background-color: red;
+    font-size: 2em;
+    padding: .2em;
+  }
+
+  .container {
+    padding: 1em;
+  }
 </style>

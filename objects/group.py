@@ -28,7 +28,8 @@ class Group(Base):
             out.update({
                 "joins": {
                     "state": self.state.name,
-                    "users": [{"id": user.id, "username": user.username} for user in self.users]
+                    "users": [{"id": user.id, "username": user.username} for user in self.users],
+                    "parent": self.parent.name if self.parent else None
                 }
             })
         return out
