@@ -9,10 +9,12 @@ from helpers.user_manager import UserManager
 from helpers.db_manager import DatabaseManager, DbType
 
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 
@@ -36,8 +38,13 @@ class UserEndpoint(Resource):
 
     def post(self, username):
         if username == "new":
-            user = User(**self.parser.parse_args())
-            return user
+            args = self.parser.parse_args()
+            # get state from DB
+            args.state = db.select_object(State).filter_by(name=args.state).one()
+            user = User(**args)
+            # insert to DB
+            db.add_object(user)
+            return user.as_dict()
 
 
 class GroupEndpoint(Resource):
@@ -90,11 +97,14 @@ class HostEndpoint(Resource):
 class CommandEndpoint(Resource):
     def get(self, command):
         if command == "insert_defaults":
+            db.create_schema(Base)
             manager.insert_default_values()
         elif command == "deploy_all":
             deploy()
+        elif command == "save_all":
+            db.commit_changes()
         else:
-            return {"Error": "Command %s not supported!" % command}
+            return {"Error": "Command '%s' not supported!" % command}
 
 
 api.add_resource(UserEndpoint, '/api/v1/users/<string:username>')
@@ -139,5 +149,3 @@ if __name__ == "__main__":
 
     # hosts = Host('Ubuntu-TEST01', '172.0.0.45', ssh_jbu), Host('Ubuntu-TEST02', '172.0.0.46', ssh_jbu)
     # db.add_objects(hosts)
-
-    # db.commit_changes()
