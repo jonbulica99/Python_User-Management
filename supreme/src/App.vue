@@ -8,7 +8,13 @@
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/">Users</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/groups">Groups</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/hosts">Hosts</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/about">About</router-link>
@@ -20,6 +26,6 @@
   </div>
 </template>
 
-<style lang="scss">
-  @import url(assets/scss/main.scss);
+<style>
+
 </style>

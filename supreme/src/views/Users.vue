@@ -1,20 +1,20 @@
 <template>
   <div class="home">
     <Users></Users>
-    <Hosts></Hosts>
+    <NewUser></NewUser>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+
 import Users from '@/components/Users.vue'
-import Hosts from '@/components/Hosts.vue'
+import NewUser from '@/components/NewUser.vue'
 
 export default {
-  name: 'home',
+  name: 'users',
   components: {
     Users,
-    Hosts
+    NewUser
   }
 }
 </script>
