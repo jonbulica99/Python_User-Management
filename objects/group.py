@@ -13,9 +13,10 @@ class Group(Base):
     state = relationship('State')
     users = relationship('User', secondary="group_has_users")
 
-    def __init__(self, state, name, parent=None):
+    def __init__(self, state, name, parent=None, *args, **kwargs):
         if parent:
             self.parentID = parent.id
+        self.state = state
         self.stateID = state.id
         self.name = name
 
@@ -29,7 +30,10 @@ class Group(Base):
                 "joins": {
                     "state": self.state.name,
                     "users": [{"id": user.id, "username": user.username} for user in self.users],
-                    "parent": self.parent.name if self.parent else None
+                    "parent": {
+                        'id': self.parent.id,
+                        'name': self.parent.name
+                    } if self.parent else None
                 }
             })
         return out

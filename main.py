@@ -38,7 +38,6 @@ class UserEndpoint(Resource):
 
     def post(self, username):
         args = self.parser.parse_args()
-        print(args)
         # get state from DB
         args.state = db.select_object(State).filter_by(name=args.state).one()
         user = User(**args)
@@ -90,16 +89,18 @@ class UserEndpoint(Resource):
             except Exception as e:
                 return {
                     "success": False,
-                    "message": "Could not delete user because a host is using it."
+                    "message": "Could not delete user because a host is using it.",
+                    "exception": str(e)
                 }
             return {"success": True}
 
 
 class GroupEndpoint(Resource):
     parser = reqparse.RequestParser()
+    parser.add_argument('id', type=str)
     parser.add_argument('name', type=str)
     parser.add_argument('state', type=str)
-    parser.add_argument('parent', type=str)
+    parser.add_argument('parent', type=dict)
 
     def get(self, id):
         output = []
@@ -111,11 +112,52 @@ class GroupEndpoint(Resource):
         return output
 
     def post(self, id):
-        if not id:
-            group = Group(**self.parser.parse_args())
-            return group
-        else:
-            return self.get(id)
+        _translate = {
+            0: "new",
+            1: "edit",
+            2: "delete"
+        }
+        args = self.parser.parse_args()
+        print("DHERE", args)
+        args.state = db.select_object(State).filter_by(name=args.state).one()
+        if args.parent:
+            args.parent = db.select_object(Group).filter_by(
+                name=args.parent.get("name")).one()
+        group = Group(**args)
+        if _translate.get(id) == "new":
+            try:
+                db.add_object(group)
+                db.commit_changes()
+            except Exception as e:
+                return {"success": False, "message": str(e)}
+
+            db_group = db.select_object(Group).filter_by(name=group.name).one()
+            return {"success": True, "group": db_group.as_dict()}
+
+        elif _translate.get(id) == "edit":
+            db_group = db.select_object(Group).filter_by(id=args.get("id")).one()
+            for column in group.__table__.columns:
+                if column.name != 'id':
+                    setattr(db_group, column.name, group.as_dict().get(column.name))
+            try:
+                db.commit_changes()
+            except Exception as e:
+                return {"success": False, "message": str(e)}
+
+            return {"success": True, "group": db_group.as_dict()}
+        elif _translate.get(id) == "delete":
+            db_group = db.select_object(Group).filter_by(id=args.get("id")).one()
+            db.remove_object(db_group)
+            try:
+                db.commit_changes()
+            except Exception as e:
+                return {
+                    "success": False,
+                    "message": "Could not delete group because it's parent of other groups.",
+                    "exception": str(e)
+                }
+            return {"success": True}
+
 
 
 class HostEndpoint(Resource):
@@ -135,7 +177,12 @@ class HostEndpoint(Resource):
         return output
 
     def post(self, id):
-        if not id:
+        _translate = {
+            0: "new",
+            1: "edit",
+            2: "delete"
+        }
+        if _translate.get(id) == "new":
             host = Host(**self.parser.parse_args())
             return host
         else:

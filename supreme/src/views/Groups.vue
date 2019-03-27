@@ -1,17 +1,20 @@
 <template>
   <div class="groups">
     <Groups></Groups>
+    <NewGroup></NewGroup>
   </div>
 </template>
 
 <script>
 
 import Groups from '@/components/Groups.vue'
+import NewGroup from '@/components/NewGroup.vue'
 
 export default {
   name: 'groups',
   components: {
-    Groups
+    Groups,
+    NewGroup
   }
 }
 </script>

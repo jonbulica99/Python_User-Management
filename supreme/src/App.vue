@@ -22,7 +22,9 @@
         </ul>
       </div>
     </nav>
-    <router-view/>
+    <transition name="slide" mode="out-in" :duration="100">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
