@@ -73,6 +73,7 @@ export default {
     fetchGroups() {
       axios.get(this.group_url + "0").then(response => {
         this.groups = response.data;
+        EventBus.$emit("updateGroups", this.groups);
       });
     }
   },

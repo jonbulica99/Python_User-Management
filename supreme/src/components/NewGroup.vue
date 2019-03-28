@@ -80,15 +80,9 @@ export default {
       this.group = data;
       this.handleGroup();
     });
-  },
-  created: function() {
-    setTimeout(
-      () =>
-        axios.get(this.group_url + "0").then(response => {
-          this.groups = response.data;
-        }),
-      1000
-    );
+    EventBus.$on("updateGroups", data => {
+      this.groups = data;
+    })
   },
   methods: {
     handleGroup() {
