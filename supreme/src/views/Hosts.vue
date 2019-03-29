@@ -1,17 +1,20 @@
 <template>
   <div class="hosts">
     <Hosts actions></Hosts>
+    <NewHost></NewHost>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Hosts from '@/components/Hosts.vue'
+import NewHost from '@/components/NewHost.vue'
 
 export default {
   name: 'hosts',
   components: {
-    Hosts
+    Hosts,
+    NewHost
   }
 }
 </script>

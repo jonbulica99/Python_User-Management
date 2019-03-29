@@ -117,15 +117,14 @@ export default {
       this.user = data;
       this.handleUser();
     });
+    EventBus.$on("updateGroups", data => {
+      this.groups = data;
+    })
   },
   created: function() {
-    setTimeout(
-      () =>
-        axios.get(this.group_url + "0").then(response => {
-          this.groups = response.data;
-        }),
-      1000
-    );
+    axios.get(this.group_url + "0").then(response => {
+      this.groups = response.data;
+    });
   },
   methods: {
     handleUser() {
@@ -141,7 +140,9 @@ export default {
           axios.post(this.user_url + "new", this.user).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("User " + response.data.user.username + " created successfully.");
+              alert(
+                "User " + response.data.user.username + " created successfully."
+              );
             } else {
               alert(response.data.message);
             }

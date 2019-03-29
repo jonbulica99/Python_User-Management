@@ -131,7 +131,6 @@ class GroupEndpoint(Resource):
             2: "delete"
         }
         args = self.parser.parse_args()
-        print("DHERE", args)
         args.state = State.query.filter_by(name=args.state).one()
         if args.parent:
             args.parent = Group.query.filter_by(
@@ -176,7 +175,7 @@ class HostEndpoint(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str)
     parser.add_argument('address', type=str)
-    parser.add_argument('user', type=str)
+    parser.add_argument('user', type=dict)
     parser.add_argument('port', type=int)
 
     def get(self, id):
@@ -194,11 +193,19 @@ class HostEndpoint(Resource):
             1: "edit",
             2: "delete"
         }
+        args = self.parser.parse_args()
+        args.user = User.query.filter_by(id=args.user.get("id")).one()
+        host = Host(**args)
+
         if _translate.get(id) == "new":
-            host = Host(**self.parser.parse_args())
-            return host
-        else:
-            return self.get(id)
+            try:
+                db.add_object(host)
+                db.commit_changes()
+            except Exception as e:
+                return {"success": False, "message": str(e)}
+
+            db_host = Host.query.filter_by(name=host.name).one()
+            return {"success": True, "host": db_host.as_dict()}
 
 
 class CommandEndpoint(Resource):

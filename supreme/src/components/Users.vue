@@ -66,7 +66,7 @@ export default {
   },
   mounted() {
     EventBus.$on("fetchUsers", () => {
-      setTimeout(() => this.fetchUsers(), 1000);
+      this.fetchUsers();
     })
   },
   methods: {
@@ -86,6 +86,7 @@ export default {
     fetchUsers() {
       axios.get(this.user_url + "all").then(response => {
         this.users = response.data;
+        EventBus.$emit("updateUsers", this.users);
       });
     }
   }

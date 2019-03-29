@@ -53,7 +53,7 @@ export default {
   },
   mounted() {
     EventBus.$on("fetchGroups", () => {
-      setTimeout(() => this.fetchGroups(), 1000);
+      this.fetchGroups();
     })
   },
   methods: {
