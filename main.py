@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+import os
 from backends.ssh.commands import *
 from backends.ssh.main import SshBackend
 
-from flask import Flask
+from flask import Flask, send_from_directory, render_template
 from flask_cors import CORS
 from flask_restful import Api, Resource, reqparse
 
@@ -11,9 +12,22 @@ from helpers.user_manager import UserManager
 from objects import *
 from utils.config import Config
 
-app = Flask(__name__)
+supreme_path = os.path.join('supreme', 'dist')
+
+app = Flask(__name__, template_folder=supreme_path)
 CORS(app)
 api = Api(app)
+
+
+# serve the static output of vuejs
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    if path and '.' in path:
+        # if the path doesnt contain a filename delimiter, let the vue-router handle the request.
+        # This prevents various browser cache errors and page resolution errors if flask is restarted.
+        return send_from_directory(supreme_path, path)
+    return render_template("index.html")
 
 
 class UserEndpoint(Resource):

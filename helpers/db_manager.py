@@ -87,7 +87,8 @@ class DatabaseManager:
         db.log.info("Added hosts: %s", ', '.join(i.name for i in hosts))
 
         db.session.refresh(user_rin)
-        print("User {} belogs to groups: {}".format(user_rin.username, ', '.join(i.name for i in user_rin.groups)))
+        self.log.debug("User {} belogs to groups: {}".format(user_rin.username, ', '.join(i.name for i in user_rin.groups)))
+        db.commit_changes()
 
     @staticmethod
     def db_supported_types():
