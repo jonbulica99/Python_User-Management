@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, select, MetaData, Table
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.schema import CreateSchema
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import database_exists, create_database
@@ -8,6 +8,18 @@ from utils.extras import safeformat
 
 __version__ = 0.1
 
+def db_consistent(func):
+    def func_wrapper(self, *args, **kwargs):
+        try:
+            result = func(self, *args, **kwargs)
+            return result
+        except BaseException as e:
+            if self.session:
+                self.log.error("Fatal error occured. Rolling back to ensure DB consistency. \n %s", e)
+                self.session.rollback()
+            else:
+                raise e
+    return func_wrapper
 
 class SqlAlchemy(BaseDB):
     implementation = None
@@ -20,6 +32,7 @@ class SqlAlchemy(BaseDB):
             self.dialect = self.__class__.__name__.lower()
         if implementation:
             self.implementation = implementation
+        self.logging = kwargs.get("logging", False)
         self.engine = None
         self.metadata = None
         self.session = None
@@ -32,13 +45,14 @@ class SqlAlchemy(BaseDB):
             impl += "/{database}"
         return safeformat(impl, **self.__dict__)
 
-    def connect(self, encoding="utf-8", logging=True):
+    @db_consistent
+    def connect(self, encoding="utf-8"):
         self.log.debug("Initializing %s DB engine...", self.name)
         engine_impl = self.__implementation()
         self.log.debug("Engine implementation is %s", engine_impl)
-        self.engine = create_engine(engine_impl, encoding=encoding, echo=logging)
+        self.engine = create_engine(engine_impl, encoding=encoding, echo=False)
 
-        if logging:
+        if self.logging:
             self.__own_logger()
 
         if not database_exists(self.engine.url):
@@ -46,7 +60,8 @@ class SqlAlchemy(BaseDB):
             create_database(self.engine.url)
 
         self.log.debug("Initializing %s DB session...", self.name)
-        DBSession = sessionmaker(bind=self.engine)
+        session_factory = sessionmaker(bind=self.engine)
+        DBSession = scoped_session(session_factory)
         self.session = DBSession()
         if self.session:
             self.log.info("Sucessfully initialized the %s DB session.", self.name)
@@ -58,6 +73,7 @@ class SqlAlchemy(BaseDB):
         if self.session:
             self.session.close()
 
+    @db_consistent
     def create_schema(self, base):
         return base.metadata.create_all(self.engine)
 
@@ -71,14 +87,10 @@ class SqlAlchemy(BaseDB):
             for handler in self.log.handlers:
                 logger.addHandler(handler)
 
+    @db_consistent
     def commit_changes(self):
         self.log.info("Commiting all pending changes...")
-        try:
-            self.session.commit()
-        except Exception as e:
-            self.log.error("Fatal error occured. Rolling back to ensure DB consistency. \n %s", e)
-            self.session.rollback()
-            raise e
+        self.session.commit()
 
     def rollback_changes(self):
         self.log.info("Rolling back all pending changes...")
@@ -87,15 +99,19 @@ class SqlAlchemy(BaseDB):
     def verify_object(self, obj):
         return issubclass(obj.__class__, object)
 
+    @db_consistent
     def _add_object(self, obj):
         self.session.add(obj)
 
+    @db_consistent
     def _remove_object(self, obj):
         self.session.delete(obj)
 
+    @db_consistent
     def select(self, *args):
         query = select(*args)
         return self.session.execute(query)
 
+    @db_consistent
     def select_object(self, obj):
         return self.session.query(obj)
