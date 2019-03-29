@@ -7,7 +7,7 @@ __supported_os__ = ["Linux"]
 
 
 class UserAdd(BaseCommand):
-    @expect(ModuleNotFoundError, "Only UNIX systems support crypt!")
+    @expect(ImportError, "Only UNIX systems support crypt!")
     def __init__(self, first_name, last_name, password, username=None, groups=None, active=True, pubkey=None, change_pwd_on_first_login=True):
         self.first_name = first_name
         self.last_name = last_name
