@@ -11,7 +11,7 @@
           <th>Groups</th>
           <th>State</th>
           <th>Public Key</th>
-          <th>Actions</th>
+          <th v-if="actions">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +30,7 @@
           </td>
           <td>{{ user.joins.state }}</td>
           <td>{{ user.publicKey }}</td>
-          <td class="actions">
+          <td class="actions" v-if="actions">
             <a class="btn btn-primary" v-on:click="editUser(user)">
               <edit-icon></edit-icon>
             </a>
@@ -51,12 +51,18 @@ import { Endpoints } from "@/variables.js";
 
 export default {
   name: "users",
+  props: {
+    actions: Boolean
+  },
   data() {
     return {
       users: [],
       user_url: Endpoints.USERS,
       group_url: Endpoints.GROUPS
     };
+  },
+  created: function() {
+    this.fetchUsers();
   },
   mounted() {
     EventBus.$on("fetchUsers", () => {
@@ -82,16 +88,9 @@ export default {
         this.users = response.data;
       });
     }
-  },
-  created: function() {
-    this.fetchUsers();
   }
 };
 </script>
 
 <style scoped>
-.actions a {
-  color: white !important;
-  margin-left: 5px;
-}
 </style>

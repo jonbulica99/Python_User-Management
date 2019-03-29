@@ -56,7 +56,6 @@ class SqlAlchemy(BaseDB):
         self.log.debug("Engine implementation is %s", engine_impl)
         return engine_impl
 
-    @db_consistent
     def connect(self, flask_app):
         impl = self._connect()
         self.log.debug("Checking if database exists")
@@ -89,17 +88,14 @@ class SqlAlchemy(BaseDB):
     def verify_object(self, obj):
         return issubclass(obj.__class__, object)
 
-    @db_consistent
     def _add_object(self, obj):
         db.session.add(obj)
 
-    @db_consistent
     def _remove_object(self, obj):
         db.session.delete(obj)
 
     def select(self, *args):
         pass
 
-    @db_consistent
     def select_object(self, obj):
         pass

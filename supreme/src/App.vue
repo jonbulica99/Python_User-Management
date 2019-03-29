@@ -48,4 +48,9 @@ export default {
   .container {
     padding: 1em;
   }
+
+  .actions a {
+    color: white !important;
+    margin-left: 5px;
+  }
 </style>

@@ -5,9 +5,10 @@
       <thead>
         <tr>
           <th>Hostname</th>
-          <th>Adresse</th>
+          <th>Address</th>
           <th>Port</th>
-          <th>Anmelde-Benutzer</th>
+          <th>Login user</th>
+          <th v-if="actions">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -20,6 +21,14 @@
           <td>
             <a v-bind:href="user_url + host.joins.user.username">{{ host.joins.user.username }}</a>
           </td>
+          <td class="actions" v-if="actions">
+            <a class="btn btn-primary" v-on:click="editHost(host)">
+              <edit-icon></edit-icon>
+            </a>
+            <a class="btn btn-danger" v-on:click="confirmDelete(host)">
+              <delete-icon></delete-icon>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -28,33 +37,52 @@
 
 <script>
 import axios from "axios";
-import { Endpoints } from "../variables.js";
+import { EventBus } from "@/events.js";
+import { Endpoints } from "@/variables.js";
 
 export default {
   name: "hosts",
-  components: {
-    Endpoints
+  props: {
+    actions: Boolean
   },
   data() {
     return {
       hosts: [],
-      host_url: Endpoints.HOSTS,
-      user_url: Endpoints.USERS
+      user_url: Endpoints.USERS,
+      host_url: Endpoints.HOSTS
     };
   },
   created: function() {
-    axios.get(this.host_url + '0').then(response => {
-      this.hosts = response.data;
-    });
-    setInterval(() => {
-      axios.get(this.host_url + '0').then(response => {
+    this.fetchHosts();
+  },
+  mounted() {
+    EventBus.$on("fetchHosts", () => {
+      this.fetchHosts();
+    })
+  },
+  methods: {
+    editHost(host) {
+      EventBus.$emit("editHost", host);
+    },
+    confirmDelete(host) {
+      this.$dialog
+        .confirm("Do you really want to delete " + host.name + "?")
+        .then(function() {
+          EventBus.$emit("deleteHost", host);
+        })
+        .catch(function() {
+          console.log("Host delete aborted.");
+        });
+    },
+    fetchHosts() {
+      axios.get(this.host_url + "0").then(response => {
         this.hosts = response.data;
+        EventBus.$emit("updateHosts", this.hosts);
       });
-    }, 3600000);
+    }
   }
 };
 </script>
 
 <style scoped>
-
 </style>

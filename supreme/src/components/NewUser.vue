@@ -92,7 +92,6 @@ import Multiselect from "vue-multiselect";
 export default {
   name: "new_user",
   components: {
-    Endpoints,
     Multiselect
   },
   data() {

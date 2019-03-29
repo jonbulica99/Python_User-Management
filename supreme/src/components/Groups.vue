@@ -38,6 +38,9 @@ import { Endpoints } from "@/variables.js";
 
 export default {
   name: "groups",
+  props: {
+    actions: Boolean
+  },
   data() {
     return {
       groups: [],
@@ -45,13 +48,13 @@ export default {
       group_url: Endpoints.GROUPS
     };
   },
+  created: function() {
+    this.fetchGroups();
+  },
   mounted() {
     EventBus.$on("fetchGroups", () => {
       setTimeout(() => this.fetchGroups(), 1000);
     })
-  },
-  created: function() {
-    this.fetchGroups();
   },
   methods: {
     editGroup(group) {
@@ -73,16 +76,9 @@ export default {
         EventBus.$emit("updateGroups", this.groups);
       });
     }
-  },
-  created: function() {
-    this.fetchGroups();
   }
 };
 </script>
 
 <style scoped>
-.actions a {
-  color: white !important;
-  margin-left: 5px;
-}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="groups">
-    <Groups></Groups>
+    <Groups actions></Groups>
     <NewGroup></NewGroup>
   </div>
 </template>

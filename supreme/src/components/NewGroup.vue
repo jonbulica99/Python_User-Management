@@ -53,7 +53,6 @@ import Multiselect from "vue-multiselect";
 export default {
   name: "new_group",
   components: {
-    Endpoints,
     Multiselect
   },
   data() {

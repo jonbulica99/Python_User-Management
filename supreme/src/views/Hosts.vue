@@ -1,6 +1,6 @@
 <template>
   <div class="hosts">
-    <Hosts></Hosts>
+    <Hosts actions></Hosts>
   </div>
 </template>
 

@@ -204,7 +204,7 @@ class HostEndpoint(Resource):
 class CommandEndpoint(Resource):
     def get(self, command):
         if command == "insert_defaults":
-            db_wrapper.create_schema()
+            db.create_schema()
             manager.insert_default_values()
         elif command == "deploy_all":
             deploy()
