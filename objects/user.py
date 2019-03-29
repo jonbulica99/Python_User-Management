@@ -1,19 +1,17 @@
-from objects.base import *
+from objects.base import db, BaseObject
 
 
-class User(Base):
-    __tablename__ = 'users'
+class User(db.Model, BaseObject):
+    id = db.Column(db.Integer, primary_key=True)
+    stateID = db.Column(db.ForeignKey('state.id'), nullable=False, index=True)
+    firstname = db.Column(db.String(45), nullable=False)
+    lastname = db.Column(db.String(45), nullable=False)
+    username = db.Column(db.String(45), unique=True, nullable=False)
+    password = db.Column(db.String(45), nullable=False)
+    publicKey = db.Column(db.String(255))
 
-    id = Column(Integer, primary_key=True)
-    stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
-    firstname = Column(String(45), nullable=False)
-    lastname = Column(String(45), nullable=False)
-    username = Column(String(45), unique=True, nullable=False)
-    password = Column(String(45), nullable=False)
-    publicKey = Column(String(255))
-
-    state = relationship('State')
-    groups = relationship('Group', secondary="group_has_users")
+    state = db.relationship('State')
+    groups = db.relationship('Group', secondary="group_has_users")
 
     def __init__(self, state, firstname, lastname, password, publicKey=None, username=None, *args, **kwargs):
         self.state = state

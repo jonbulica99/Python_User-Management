@@ -1,17 +1,15 @@
-from objects.base import *
+from objects.base import db, BaseObject
 
 
-class Group(Base):
-    __tablename__ = 'groups'
+class Group(db.Model, BaseObject):
+    id = db.Column(db.Integer, primary_key=True)
+    parentID = db.Column(db.ForeignKey('group.id'), index=True)
+    stateID = db.Column(db.ForeignKey('state.id'), nullable=False, index=True)
+    name = db.Column(db.String(45), unique=True, nullable=False)
 
-    id = Column(Integer, primary_key=True)
-    parentID = Column(ForeignKey('groups.id'), index=True)
-    stateID = Column(ForeignKey('state.id'), nullable=False, index=True)
-    name = Column(String(45), unique=True, nullable=False)
-
-    parent = relationship('Group', remote_side=[id])
-    state = relationship('State')
-    users = relationship('User', secondary="group_has_users")
+    parent = db.relationship('Group', remote_side=[id])
+    state = db.relationship('State')
+    users = db.relationship('User', secondary="group_has_users")
 
     def __init__(self, state, name, parent=None, *args, **kwargs):
         if parent:

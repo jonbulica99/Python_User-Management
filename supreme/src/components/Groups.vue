@@ -1,6 +1,6 @@
 <template>
   <div class="groups container">
-    <h1 class="page-header">Manage Groups</h1>
+    <h1 class="page-header">Groups</h1>
     <table class="table table-striped">
       <thead>
         <tr>

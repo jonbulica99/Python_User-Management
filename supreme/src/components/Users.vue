@@ -1,6 +1,6 @@
 <template>
   <div class="users container">
-    <h1 class="page-header">Manage Users</h1>
+    <h1 class="page-header">Users</h1>
     <table class="table table-striped">
       <thead>
         <tr>

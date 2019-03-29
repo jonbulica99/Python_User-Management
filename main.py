@@ -14,6 +14,7 @@ from utils.config import Config
 
 supreme_path = os.path.join('supreme', 'dist')
 
+# initialize flask and the API helpers
 app = Flask(__name__, template_folder=supreme_path)
 CORS(app)
 api = Api(app)
@@ -21,7 +22,7 @@ api = Api(app)
 
 # serve the static output of vuejs
 @app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/<path:path>', methods=['GET'])
 def index(path):
     if path and '.' in path:
         # if the path doesnt contain a filename delimiter, let the vue-router handle the request.
@@ -43,30 +44,29 @@ class UserEndpoint(Resource):
     def get(self, username):
         output = []
         if username == "all":
-            for user in db.select_object(User).all():
+            for user in User.query.all():
                 output.append(user.as_dict())
         else:
-            output = db.select_object(User).filter_by(
+            output = User.query.filter_by(
                 username=username).one().as_dict()
         return output
 
     def post(self, username):
         args = self.parser.parse_args()
         # get state from DB
-        args.state = db.select_object(State).filter_by(name=args.state).one()
+        args.state = State.query.filter_by(name=args.state).one()
         user = User(**args)
 
         if username == "new":
             # insert to DB
             db.add_object(user)
-            db_user = db.select_object(User).filter_by(
+            db_user = User.query.filter_by(
                 username=user.username).one()
             # add user, group relationship
             if args.groups:
                 groups = args.groups
                 for group in groups:
-                    group = db.select_object(
-                        Group).filter_by(id=group.get('id')).one()
+                    group = Group.query.filter_by(id=group.get('id')).one()
                     db.add_object(UserGroupLink(db_user, group))
 
             # no errors until now, so commit the changes
@@ -74,7 +74,7 @@ class UserEndpoint(Resource):
             return {"success": True, "user": user.as_dict()}
 
         elif username == "edit":
-            db_user = db.select_object(User).filter_by(id=args.get("id")).one()
+            db_user = User.query.filter_by(id=args.get("id")).one()
             for column in user.__table__.columns:
                 if column.name != 'id':
                     setattr(db_user, column.name,
@@ -83,20 +83,19 @@ class UserEndpoint(Resource):
             # edit user, group relationship
             if args.groups:
                 # first delete existing groups
-                current_groups = db.select_object(
-                    UserGroupLink).filter_by(userid=db_user.id).all()
+                current_groups = UserGroupLink.query.filter_by(userid=db_user.id).all()
                 db.remove_objects(current_groups)
                 # add updated groups
                 groups = args.groups
                 for group in groups:
-                    group = db.select_object(Group).filter_by(
+                    group = Group.query.filter_by(
                         id=group.get('id')).one()
                     db.add_object(UserGroupLink(db_user, group))
             db.commit_changes()
             return {"success": True}
 
         elif username == "delete":
-            db_user = db.select_object(User).filter_by(id=args.get("id")).one()
+            db_user = User.query.filter_by(id=args.get("id")).one()
             db.remove_object(db_user)
             try:
                 db.commit_changes()
@@ -119,10 +118,10 @@ class GroupEndpoint(Resource):
     def get(self, id):
         output = []
         if not id:
-            for group in db.select_object(Group).all():
+            for group in Group.query.all():
                 output.append(group.as_dict())
         else:
-            output = db.select_object(Group).filter_by(id=id).one().as_dict()
+            output = Group.query.filter_by(id=id).one().as_dict()
         return output
 
     def post(self, id):
@@ -133,9 +132,9 @@ class GroupEndpoint(Resource):
         }
         args = self.parser.parse_args()
         print("DHERE", args)
-        args.state = db.select_object(State).filter_by(name=args.state).one()
+        args.state = State.query.filter_by(name=args.state).one()
         if args.parent:
-            args.parent = db.select_object(Group).filter_by(
+            args.parent = Group.query.filter_by(
                 name=args.parent.get("name")).one()
         group = Group(**args)
         if _translate.get(id) == "new":
@@ -145,11 +144,11 @@ class GroupEndpoint(Resource):
             except Exception as e:
                 return {"success": False, "message": str(e)}
 
-            db_group = db.select_object(Group).filter_by(name=group.name).one()
+            db_group = Group.query.filter_by(name=group.name).one()
             return {"success": True, "group": db_group.as_dict()}
 
         elif _translate.get(id) == "edit":
-            db_group = db.select_object(Group).filter_by(id=args.get("id")).one()
+            db_group = Group.query.filter_by(id=args.get("id")).one()
             for column in group.__table__.columns:
                 if column.name != 'id':
                     setattr(db_group, column.name, group.as_dict().get(column.name))
@@ -160,7 +159,7 @@ class GroupEndpoint(Resource):
 
             return {"success": True, "group": db_group.as_dict()}
         elif _translate.get(id) == "delete":
-            db_group = db.select_object(Group).filter_by(id=args.get("id")).one()
+            db_group = Group.query.filter_by(id=args.get("id")).one()
             db.remove_object(db_group)
             try:
                 db.commit_changes()
@@ -183,10 +182,10 @@ class HostEndpoint(Resource):
     def get(self, id):
         output = []
         if not id:
-            for host in db.select_object(Host).all():
+            for host in Host.query.all():
                 output.append(host.as_dict())
         else:
-            output = db.select_object(Host).filter_by(id=id).one().as_dict()
+            output = Host.query.filter_by(id=id).one().as_dict()
         return output
 
     def post(self, id):
@@ -205,7 +204,7 @@ class HostEndpoint(Resource):
 class CommandEndpoint(Resource):
     def get(self, command):
         if command == "insert_defaults":
-            db.create_schema(Base)
+            db_wrapper.create_schema()
             manager.insert_default_values()
         elif command == "deploy_all":
             deploy()
@@ -222,10 +221,9 @@ api.add_resource(CommandEndpoint, '/api/v1/cmd/<string:command>')
 
 
 def deploy():
-    hosts = db.select_object(Host).filter(
-        ~Host.name.contains('localhost')).all()
-    users = db.select_object(User).all()
-    groups = db.select_object(Group).all()
+    hosts = Host.query.filter(~Host.name.contains('localhost')).all()
+    users = User.query.all()
+    groups = Group.query.all()
     for host in hosts:
         ssh = SshBackend(host)
         ssh.connect()
@@ -242,19 +240,18 @@ if __name__ == "__main__":
     # load db components
     manager = DatabaseManager(main_config)
     db = manager.create_database()
-    db.connect()
-    db.create_schema(Base)
+    db.connect(app)
 
     # start flask
     app.run(**main_config.parse_section("frontend"))
 
     exit(0)
 
-    state_present = db.select_object(State).filter_by(name="present").one()
+    state_present = State.query.filter_by(name="present").one()
 
     # user to connect with
     # db.add_object(User(state_present, 'Jon', 'Bulica', 'Kennwort10!', username='jbu'))
-    ssh_jbu = db.select_object(User).filter_by(username='jbu').one()
+    ssh_jbu = User.query.filter_by(username='jbu').one()
 
     # hosts = Host('Ubuntu-TEST01', '172.0.0.45', ssh_jbu), Host('Ubuntu-TEST02', '172.0.0.46', ssh_jbu)
     # db.add_objects(hosts)

@@ -27,6 +27,10 @@ class DatabaseManager:
         self.log.info("Loaded DatabaseManager with %s", self.type)
         self.db = None
 
+    @staticmethod
+    def db_supported_types():
+        return [t for t in DbType]
+
     def setting(self, setting):
         db_conf = self.config.parse_section("database")
         if setting:
@@ -54,14 +58,14 @@ class DatabaseManager:
         db.log.debug("Adding default states to the database")
         states = [State(name=i) for i in __db_defaults__.get("states")]
         db.add_objects(states)
-        state_present = db.select_object(State).filter_by(name="present").one()
+        state_present = State.query.filter_by(name="present").one()
         db.log.info("Added states: %s", ', '.join(i.name for i in states))
 
         db.log.debug("Adding default groups to the database")
         groups = [Group(name=i, state=state_present)
                   for i in __db_defaults__.get("groups")]
         db.add_objects(groups)
-        group_dev = db.select_object(Group).filter_by(name="developers").one()
+        group_dev = Group.query.filter_by(name="developers").one()
         db.log.info("Added groups: %s", ', '.join(i.name for i in groups))
 
         db.log.debug("Adding default users to the database")
@@ -70,13 +74,13 @@ class DatabaseManager:
         users = [User(state=state_present, firstname=f, lastname=l,
                       password=user_def_pass) for f, l in __db_defaults__.get("users")]
         db.add_objects(users)
-        user_rin = db.select_object(User).filter_by(username=users[2].username).one()
+        user_rin = User.query.filter_by(username=users[2].username).one()
         db.log.info("Added users: %s", ', '.join(i.username for i in users))
 
         db.log.debug("Setting up user/group relationships")
         # by default every default user is also a member of the default group (developers)
         usergrouplinks = [UserGroupLink(user, group_dev)
-                          for user in db.select_object(User).all()]
+                          for user in User.query.all()]
         db.add_objects(usergrouplinks)
         db.log.info("Added user/group relationships: %s",
                     ', '.join('uid: {u} => gid: {g}'.format(u=i.userid, g=i.groupid) for i in usergrouplinks))
@@ -86,10 +90,5 @@ class DatabaseManager:
         db.add_objects(hosts)
         db.log.info("Added hosts: %s", ', '.join(i.name for i in hosts))
 
-        db.session.refresh(user_rin)
         self.log.debug("User {} belogs to groups: {}".format(user_rin.username, ', '.join(i.name for i in user_rin.groups)))
         db.commit_changes()
-
-    @staticmethod
-    def db_supported_types():
-        return [t for t in DbType]

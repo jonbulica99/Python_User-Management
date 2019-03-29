@@ -1,16 +1,14 @@
-from objects.base import *
+from objects.base import db, BaseObject
 
 
-class Host(Base):
-    __tablename__ = 'hosts'
+class Host(db.Model, BaseObject):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(45), unique=True, nullable=False)
+    address = db.Column(db.String(45), unique=True, nullable=False)
+    port = db.Column(db.Integer)
+    userID = db.Column(db.ForeignKey('user.id'), nullable=False, index=True)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(45), unique=True, nullable=False)
-    address = Column(String(45), unique=True, nullable=False)
-    port = Column(Integer)
-    userID = Column(ForeignKey('users.id'), nullable=False, index=True)
-
-    user = relationship('User')
+    user = db.relationship('User')
 
     def __init__(self, name, address, user, port=22):
         self.name = name

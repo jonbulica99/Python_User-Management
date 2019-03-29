@@ -1,11 +1,9 @@
-from objects.base import *
+from objects.base import db, BaseObject
 
 
-class State(Base):
-    __tablename__ = 'state'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(45), unique=True, nullable=False)
+class State(db.Model, BaseObject):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(45), unique=True, nullable=False)
 
     def __init__(self, name):
         self.name = name

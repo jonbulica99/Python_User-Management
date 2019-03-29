@@ -1,9 +1,10 @@
 // variables.js
 
 export const routerOptions = [
-    { path: '/', component: 'Users' },
-    { path: '/hosts', component: 'Hosts' },
+    { path: '/', component: 'Overview' },
+    { path: '/users', component: 'Users' },
     { path: '/groups', component: 'Groups' },
+    { path: '/hosts', component: 'Hosts' },
     { path: '/about', component: 'About' }
 ]
 

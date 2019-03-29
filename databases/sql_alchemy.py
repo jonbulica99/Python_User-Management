@@ -1,9 +1,6 @@
-from sqlalchemy import create_engine, select, MetaData, Table
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.schema import CreateSchema
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy_utils import database_exists, create_database
+from objects import db
 from databases.base import BaseDB
+from sqlalchemy_utils import database_exists, create_database
 from utils.extras import safeformat
 
 __version__ = 0.1
@@ -22,7 +19,6 @@ def db_consistent(func):
     return func_wrapper
 
 class SqlAlchemy(BaseDB):
-    implementation = None
     def __init__(self, database, dialect=None, implementation=None, version=__version__, *args, **kwargs):
         super().__init__(version=version, *args, **kwargs)
         self.database = database
@@ -33,49 +29,6 @@ class SqlAlchemy(BaseDB):
         if implementation:
             self.implementation = implementation
         self.logging = kwargs.get("logging", False)
-        self.engine = None
-        self.metadata = None
-        self.session = None
-
-    def __implementation(self):
-        impl = "{dialect}://"
-        if self.implementation:
-            impl += self.implementation
-        if self.database:
-            impl += "/{database}"
-        return safeformat(impl, **self.__dict__)
-
-    @db_consistent
-    def connect(self, encoding="utf-8"):
-        self.log.debug("Initializing %s DB engine...", self.name)
-        engine_impl = self.__implementation()
-        self.log.debug("Engine implementation is %s", engine_impl)
-        self.engine = create_engine(engine_impl, encoding=encoding, echo=False)
-
-        if self.logging:
-            self.__own_logger()
-
-        if not database_exists(self.engine.url):
-            self.log.warn("Database '%s' not found. Creating it now!", self.database)
-            create_database(self.engine.url)
-
-        self.log.debug("Initializing %s DB session...", self.name)
-        session_factory = sessionmaker(bind=self.engine)
-        DBSession = scoped_session(session_factory)
-        self.session = DBSession()
-        if self.session:
-            self.log.info("Sucessfully initialized the %s DB session.", self.name)
-        else:
-            self.log.error("Failed initializing the %s DB session.", self.name)
-
-    def close(self):
-        self.log.info("Closing DB session...")
-        if self.session:
-            self.session.close()
-
-    @db_consistent
-    def create_schema(self, base):
-        return base.metadata.create_all(self.engine)
 
     def __own_logger(self):
         import logging
@@ -87,31 +40,66 @@ class SqlAlchemy(BaseDB):
             for handler in self.log.handlers:
                 logger.addHandler(handler)
 
+    def _connect(self):
+        self.log.debug("Initializing %s DB engine...", self.name)
+        # setup logging
+        if self.logging:
+            self.__own_logger()
+
+        # engine implementation
+        impl = "{dialect}://"
+        if self.implementation:
+            impl += self.implementation
+        if self.database:
+            impl += "/{database}"
+        engine_impl = safeformat(impl, **self.__dict__)
+        self.log.debug("Engine implementation is %s", engine_impl)
+        return engine_impl
+
     @db_consistent
+    def connect(self, flask_app):
+        impl = self._connect()
+        self.log.debug("Checking if database exists")
+        if not database_exists(impl):
+            self.log.warn("Database '%s' not found. Creating it now!", self.database)
+            create_database(impl)
+        self.log.info("Attempting flask integration...")
+        flask_app.config['SQLALCHEMY_DATABASE_URI'] = impl
+        flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        db.init_app(flask_app)
+        return db
+
+    def close(self):
+        self.log.info("Closing DB session...")
+        if db.session:
+            db.session.remove()
+
+    def create_schema(self):
+        self.log.info("Creating database schema...")
+        return db.create_all()
+
     def commit_changes(self):
         self.log.info("Commiting all pending changes...")
-        self.session.commit()
+        db.session.commit()
 
     def rollback_changes(self):
         self.log.info("Rolling back all pending changes...")
-        self.session.rollback()
+        db.session.rollback()
 
     def verify_object(self, obj):
         return issubclass(obj.__class__, object)
 
     @db_consistent
     def _add_object(self, obj):
-        self.session.add(obj)
+        db.session.add(obj)
 
     @db_consistent
     def _remove_object(self, obj):
-        self.session.delete(obj)
+        db.session.delete(obj)
 
-    @db_consistent
     def select(self, *args):
-        query = select(*args)
-        return self.session.execute(query)
+        pass
 
     @db_consistent
     def select_object(self, obj):
-        return self.session.query(obj)
+        pass

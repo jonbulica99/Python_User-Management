@@ -1,6 +1,6 @@
 <template>
   <div class="hosts container">
-    <h1 class="page-header">Manage Hosts</h1>
+    <h1 class="page-header">Hosts</h1>
     <table class="table table-striped">
       <thead>
         <tr>

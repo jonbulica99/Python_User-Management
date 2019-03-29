@@ -3,3 +3,4 @@ sqlalchemy_utils
 fabric
 flask
 flask_restful
+flask_sqlalchemy
