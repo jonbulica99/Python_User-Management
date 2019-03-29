@@ -1,13 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import User from './views/Users.vue'
-
-const routerOptions = [
-  { path: '/', component: 'Users' },
-  { path: '/hosts', component: 'Hosts' },
-  { path: '/groups', component: 'Groups' },
-  { path: '/about', component: 'About' }
-]
+import { routerOptions } from "@/variables.js"
 
 const routes = routerOptions.map(route => {
   return {

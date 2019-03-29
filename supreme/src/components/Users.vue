@@ -51,9 +51,6 @@ import { Endpoints } from "@/variables.js";
 
 export default {
   name: "users",
-  components: {
-    Endpoints
-  },
   data() {
     return {
       users: [],

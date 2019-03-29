@@ -34,13 +34,10 @@
 <script>
 import axios from "axios";
 import { EventBus } from "@/events.js";
-import { Endpoints } from "../variables.js";
+import { Endpoints } from "@/variables.js";
 
 export default {
   name: "groups",
-  components: {
-    Endpoints
-  },
   data() {
     return {
       groups: [],

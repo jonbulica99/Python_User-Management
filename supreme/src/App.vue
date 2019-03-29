@@ -7,17 +7,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/">Users</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/groups">Groups</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/hosts">Hosts</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/about">About</router-link>
+          <li class="nav-item" v-for="item in navitems">
+            <router-link class="nav-link" :to="item.path">{{ item.component }}</router-link>
           </li>
         </ul>
       </div>
@@ -27,6 +18,19 @@
     </transition>
   </div>
 </template>
+
+<script>
+import { routerOptions } from "@/variables.js"
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      navitems: routerOptions
+    };
+  }
+}
+</script>
 
 <style>
   @font-face {
