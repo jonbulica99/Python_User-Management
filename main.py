@@ -159,7 +159,6 @@ class GroupEndpoint(Resource):
             return {"success": True}
 
 
-
 class HostEndpoint(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str)
