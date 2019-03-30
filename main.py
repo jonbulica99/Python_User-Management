@@ -173,6 +173,7 @@ class GroupEndpoint(Resource):
 
 class HostEndpoint(Resource):
     parser = reqparse.RequestParser()
+    parser.add_argument('id', type=str)
     parser.add_argument('name', type=str)
     parser.add_argument('address', type=str)
     parser.add_argument('user', type=dict)
@@ -207,6 +208,30 @@ class HostEndpoint(Resource):
             db_host = Host.query.filter_by(name=host.name).one()
             return {"success": True, "host": db_host.as_dict()}
 
+        elif _translate.get(id) == "edit":
+            db_host = Host.query.filter_by(id=args.get("id")).one()
+            for column in host.__table__.columns:
+                if column.name != 'id':
+                    setattr(db_host, column.name, host.as_dict().get(column.name))
+            try:
+                db.commit_changes()
+            except Exception as e:
+                return {"success": False, "message": str(e)}
+
+            return {"success": True, "host": db_host.as_dict()}
+
+        elif _translate.get(id) == "delete":
+            db_host = Host.query.filter_by(id=args.get("id")).one()
+            db.remove_object(db_host)
+            try:
+                db.commit_changes()
+            except Exception as e:
+                return {
+                    "success": False,
+                    "message": "Something went terribly wrong an we couldn't delete this host.",
+                    "exception": str(e)
+                }
+            return {"success": True}
 
 class CommandEndpoint(Resource):
     def get(self, command):

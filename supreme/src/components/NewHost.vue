@@ -77,7 +77,8 @@ export default {
     return {
       action: "New",
       host: {
-        user: ""
+        user: "",
+        port: 22
       },
       host_url: Endpoints.HOSTS,
       user_url: Endpoints.USERS,
@@ -147,7 +148,8 @@ export default {
     },
     resetForm() {
       this.host = {
-        user: ""
+        user: "",
+        port: 22
       };
       this.action = "New";
     }
