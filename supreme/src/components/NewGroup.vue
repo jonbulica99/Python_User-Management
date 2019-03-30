@@ -12,7 +12,8 @@
             id="firstname"
             v-model="group.name"
             placeholder="Example"
-            required>
+            required
+          >
         </div>
         <div class="col-md-3 mb-3">
           <label for="state">State</label>
@@ -81,48 +82,50 @@ export default {
     });
     EventBus.$on("updateGroups", data => {
       this.groups = data;
-    })
+    });
   },
   methods: {
     handleGroup() {
       this.group.state = this.stateValue;
       this.group.parent = this.parentValue;
-      
+
       if (!this.group.name) {
-        alert("Please fill in the group name.");
+        this.$dialog.confirm("Please fill in the group name.");
       } else if (!this.group.state) {
-        alert("Please select a valid group state.");
+        this.$dialog.confirm("Please select a valid group state.");
       } else {
         if (this.action === "New") {
           axios.post(this.group_url + "0", this.group).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("Group " + response.data.group.name + " created successfully.");
+              this.$dialog.confirm("Group " + response.data.group.name + " created successfully.");
+              EventBus.$emit("fetchGroups");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         } else if (this.action === "Edit") {
           axios.post(this.group_url + "1", this.group).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("Group " + this.group.name + " edited successfully.");
+              this.$dialog.confirm("Group " + this.group.name + " edited successfully.");
+              EventBus.$emit("fetchGroups");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         } else if (this.action === "Delete") {
           axios.post(this.group_url + "2", this.group).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("Group " + this.group.name + " deleted successfully.");
+              this.$dialog.confirm("Group " + this.group.name + " deleted successfully.");
+              EventBus.$emit("fetchGroups");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         }
       }
-      EventBus.$emit("fetchGroups");
     },
     resetForm() {
       this.group = {

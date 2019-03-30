@@ -29,7 +29,10 @@
             </span>
           </td>
           <td>{{ user.joins.state }}</td>
-          <td>{{ user.publicKey }}</td>
+          <td v-if="user.publicKey">{{ user.publicKey }}</td>
+          <td v-else>
+            <i>None</i>
+          </td>
           <td class="actions" v-if="actions">
             <a class="btn btn-primary" v-on:click="editUser(user)">
               <edit-icon></edit-icon>

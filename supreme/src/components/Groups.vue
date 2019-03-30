@@ -7,7 +7,7 @@
           <th>Name</th>
           <th>State</th>
           <th>Parent</th>
-          <th>Actions</th>
+          <th v-if="actions">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -15,9 +15,15 @@
           <td>{{ group.name }}</td>
           <td>{{ group.joins.state }}</td>
           <td>
-            <a v-if="group.joins.parent" v-bind:href="group_url + group.joins.parent.id">{{ group.joins.parent.name }}</a>
+            <a
+              v-if="group.joins.parent"
+              v-bind:href="group_url + group.joins.parent.id"
+            >{{ group.joins.parent.name }}</a>
+            <div v-else>
+              <i>None</i>
+            </div>
           </td>
-          <td class="actions">
+          <td class="actions" v-if="actions">
             <a class="btn btn-primary" v-on:click="editGroup(group)">
               <edit-icon></edit-icon>
             </a>
@@ -54,7 +60,7 @@ export default {
   mounted() {
     EventBus.$on("fetchGroups", () => {
       this.fetchGroups();
-    })
+    });
   },
   methods: {
     editGroup(group) {

@@ -59,14 +59,18 @@ class SqlAlchemy(BaseDB):
     def connect(self, flask_app):
         impl = self._connect()
         self.log.debug("Checking if database exists")
-        if not database_exists(impl):
-            self.log.warn("Database '%s' not found. Creating it now!", self.database)
-            create_database(impl)
-        self.log.info("Attempting flask integration...")
-        flask_app.config['SQLALCHEMY_DATABASE_URI'] = impl
-        flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        db.init_app(flask_app)
-        return db
+        try:
+            if not database_exists(impl):
+                self.log.warn("Database '%s' not found. Creating it now!", self.database)
+                create_database(impl)
+            self.log.info("Attempting flask integration...")
+            flask_app.config['SQLALCHEMY_DATABASE_URI'] = impl
+            flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+            db.init_app(flask_app)
+            return db
+        except Exception as e:
+            self.log.error("Connection failed: %s", e)
+            raise e
 
     def close(self):
         self.log.info("Closing DB session...")

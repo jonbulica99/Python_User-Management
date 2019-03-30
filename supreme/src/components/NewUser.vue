@@ -132,42 +132,42 @@ export default {
       this.user.groups = this.groupsValue;
 
       if (!this.user.firstname || !this.user.lastname) {
-        alert("Please fill in first and last name.");
+        this.$dialog.confirm("Please fill in first and last name.");
       } else if (!this.user.state) {
-        alert("Please select a valid user state.");
+        this.$dialog.confirm("Please select a valid user state.");
       } else {
         if (this.action === "New") {
           axios.post(this.user_url + "new", this.user).then(response => {
             let status = response.data.success;
             if (status) {
-              alert(
-                "User " + response.data.user.username + " created successfully."
-              );
+              this.$dialog.confirm("User " + response.data.user.username + " created successfully.");
+              EventBus.$emit("fetchUsers");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         } else if (this.action === "Edit") {
           axios.post(this.user_url + "edit", this.user).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("User " + this.user.username + " edited successfully.");
+              this.$dialog.confirm("User " + this.user.username + " edited successfully.");
+              EventBus.$emit("fetchUsers");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         } else if (this.action === "Delete") {
           axios.post(this.user_url + "delete", this.user).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("User " + this.user.username + " deleted successfully.");
+              this.$dialog.confirm("User " + this.user.username + " deleted successfully.");
+              EventBus.$emit("fetchUsers");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         }
       }
-      EventBus.$emit("fetchUsers");
     },
     resetForm() {
       this.user = {

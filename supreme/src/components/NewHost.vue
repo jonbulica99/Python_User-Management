@@ -108,40 +108,42 @@ export default {
       this.host.user = this.userValue;
 
       if (!this.host.name) {
-        alert("Please fill in the hostname.");
+        this.$dialog.confirm("Please fill in the hostname.");
       } else if (!this.host.user && this.action != "Delete") {
-        alert("Please select a valid user to use for connecting to the host.");
+        this.$dialog.confirm("Please select a valid user to use for connecting to the host.");
       } else {
         if (this.action === "New") {
           axios.post(this.host_url + "0", this.host).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("Host " + response.data.host.name + " created successfully.");
+              this.$dialog.confirm("Host " + response.data.host.name + " created successfully.");
+              EventBus.$emit("fetchHosts");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         } else if (this.action === "Edit") {
           axios.post(this.host_url + "1", this.host).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("Host " + this.host.name + " edited successfully.");
+              this.$dialog.confirm("Host " + this.host.name + " edited successfully.");
+              EventBus.$emit("fetchHosts");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         } else if (this.action === "Delete") {
           axios.post(this.host_url + "2", this.host).then(response => {
             let status = response.data.success;
             if (status) {
-              alert("Host " + this.host.name + " deleted successfully.");
+              this.$dialog.confirm("Host " + this.host.name + " deleted successfully.");
+              EventBus.$emit("fetchHosts");
             } else {
-              alert(response.data.message);
+              this.$dialog.confirm(response.data.message);
             }
           });
         }
       }
-      EventBus.$emit("fetchHosts");
     },
     resetForm() {
       this.host = {
