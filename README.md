@@ -15,12 +15,7 @@ python3 -m pip install -r requirements.txt
 ```
 
 ## TODO
-1. connection protocols (?) > ssh
-    * connection manager
-2. user manager 
-    * https://github.com/ansible/ansible/blob/stable-2.7/lib/ansible/modules/system/user.py ¯\\_(ツ)_/¯
-
-9999999. unittests
+1. About.vue
 
 
 ## Unit-Tests
