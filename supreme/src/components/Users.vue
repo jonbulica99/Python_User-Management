@@ -22,7 +22,14 @@
             <td>
               <a v-bind:href="user_url + user.username">{{ user.username }}</a>
             </td>
-            <td>{{ user.password }}</td>
+            <td>
+              <input
+                class="rounded border-0"
+                type="password"
+                :value="user.password"
+                disabled="disabled"
+              >
+            </td>
             <td>
               <span v-for="group in user.joins.groups" v-bind:key="group.id">
                 <a class="badge badge-secondary" v-bind:href="group_url + group.id">{{ group.name }}</a>
