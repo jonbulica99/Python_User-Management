@@ -17,7 +17,6 @@ python3 -m pip install -r requirements.txt
 ## TODO
 1. Use-Case-Diagramm
 2. Klassendiagramm
-3. About.vue
 
 
 ## Unit-Tests

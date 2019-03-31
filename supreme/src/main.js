@@ -1,13 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import BootstrapVue from 'bootstrap-vue'
-import VuejsDialog from "vuejs-dialog"
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import BootstrapVue from 'bootstrap-vue';
+import VuejsDialog from 'vuejs-dialog';
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'vue-material-design-icons/styles.css'
+// import stylesheets
+import 'bootstrap/dist/css/bootstrap.css';
+import 'vue-material-design-icons/styles.css';
 
 // use bootstrap
+import 'bootstrap';
 Vue.use(BootstrapVue)
 
 // dialogs

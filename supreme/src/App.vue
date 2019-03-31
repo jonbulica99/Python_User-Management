@@ -40,6 +40,10 @@ export default {
     src: url("assets/FuturaStd-HeavyOblique.otf");
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'vSupreme' !important;
+  }
+
   a.navbar-brand {
     font-family: vSupreme;
     background-color: red;
