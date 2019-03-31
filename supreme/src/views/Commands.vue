@@ -1,5 +1,5 @@
 <template>
-  <div class="commands">
+  <div class="commands-page">
     <Commands></Commands>
   </div>
 </template>

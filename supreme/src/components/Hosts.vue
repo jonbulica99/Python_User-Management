@@ -1,8 +1,8 @@
 <template>
-  <div class="hosts container">
+  <div class="hosts container card shadow-sm">
     <h1 class="page-header">Hosts</h1>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-hover table-responsive-sm">
+      <thead class="thead-light">
         <tr>
           <th>Hostname</th>
           <th>Address</th>
@@ -11,25 +11,27 @@
           <th v-if="actions">Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="host in hosts">
-          <td>
-            <a v-bind:href="host_url + host.id">{{ host.name }}</a>
-          </td>
-          <td>{{ host.address }}</td>
-          <td>{{ host.port }}</td>
-          <td>
-            <a v-bind:href="user_url + host.joins.user.username">{{ host.joins.user.username }}</a>
-          </td>
-          <td class="actions" v-if="actions">
-            <a class="btn btn-primary" v-on:click="editHost(host)">
-              <edit-icon></edit-icon>
-            </a>
-            <a class="btn btn-danger" v-on:click="confirmDelete(host)">
-              <delete-icon></delete-icon>
-            </a>
-          </td>
-        </tr>
+      <tbody v-bind:name="actions ? 'fade' : ''" is="transition-group">
+        <template v-for="host in hosts">
+          <tr v-bind:key="host.id">
+            <td>
+              <a v-bind:href="host_url + host.id">{{ host.name }}</a>
+            </td>
+            <td>{{ host.address }}</td>
+            <td>{{ host.port }}</td>
+            <td>
+              <a v-bind:href="user_url + host.joins.user.username">{{ host.joins.user.username }}</a>
+            </td>
+            <td class="actions" v-if="actions">
+              <a class="btn btn-primary" v-on:click="editHost(host)">
+                <edit-icon></edit-icon>
+              </a>
+              <a class="btn btn-danger" v-on:click="confirmDelete(host)">
+                <delete-icon></delete-icon>
+              </a>
+            </td>
+          </tr>
+        </template>
       </tbody>
     </table>
   </div>
@@ -58,7 +60,7 @@ export default {
   mounted() {
     EventBus.$on("fetchHosts", () => {
       this.fetchHosts();
-    })
+    });
   },
   methods: {
     editHost(host) {
@@ -77,11 +79,15 @@ export default {
     fetchHosts() {
       axios.get(this.host_url + "0").then(response => {
         response = response.data;
-        if(response.success){
+        if (response.success) {
           this.hosts = response.data;
           EventBus.$emit("updateHosts", this.hosts);
         } else {
-          this.$dialog.alert("<b>Error fetching hosts</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          this.$dialog.alert(
+            "<b>Error fetching hosts</b>: " +
+              response.message +
+              "<br><i>Check the console log for more information.</i>"
+          );
           console.log(response.exception);
         }
       });

@@ -86,39 +86,6 @@ export default {
 </script>
 
 <style scoped>
-.logo {
-  display: flex;
-  color: #fff;
-  align-items: center;
-  justify-content: center;
-  font-family: vSupreme;
-  background-color: red;
-  font-size: 5rem;
-  padding: 1rem;
-}
-
-.fast-transition {
-  position: relative;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.fast-transition::after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  border-radius: 5px;
-  box-shadow: 0 0 15px 0 rgba(0,0,0,0.2);
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fast-transition:hover::after {
-  opacity: 1;
-}
-
 .console-font {
   font-family: "Lucida Console", "Lucida Sans Typewriter", monaco, "Bitstream Vera Sans Mono", monospace;
 }

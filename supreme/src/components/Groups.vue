@@ -1,8 +1,8 @@
 <template>
-  <div class="groups container">
+  <div class="groups container card shadow-sm">
     <h1 class="page-header">Groups</h1>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-hover table-responsive-sm">
+      <thead class="thead-light">
         <tr>
           <th>Name</th>
           <th>State</th>
@@ -10,28 +10,30 @@
           <th v-if="actions">Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="group in groups">
-          <td>{{ group.name }}</td>
-          <td>{{ group.joins.state }}</td>
-          <td>
-            <a
-              v-if="group.joins.parent"
-              v-bind:href="group_url + group.joins.parent.id"
-            >{{ group.joins.parent.name }}</a>
-            <div v-else>
-              <i>None</i>
-            </div>
-          </td>
-          <td class="actions" v-if="actions">
-            <a class="btn btn-primary" v-on:click="editGroup(group)">
-              <edit-icon></edit-icon>
-            </a>
-            <a class="btn btn-danger" v-on:click="confirmDelete(group)">
-              <delete-icon></delete-icon>
-            </a>
-          </td>
-        </tr>
+      <tbody v-bind:name="actions ? 'fade' : ''" is="transition-group">
+        <template v-for="group in groups">
+          <tr v-bind:key="group.id">
+            <td>{{ group.name }}</td>
+            <td>{{ group.joins.state }}</td>
+            <td>
+              <a
+                v-if="group.joins.parent"
+                v-bind:href="group_url + group.joins.parent.id"
+              >{{ group.joins.parent.name }}</a>
+              <div v-else>
+                <i>None</i>
+              </div>
+            </td>
+            <td class="actions" v-if="actions">
+              <a class="btn btn-primary" v-on:click="editGroup(group)">
+                <edit-icon></edit-icon>
+              </a>
+              <a class="btn btn-danger" v-on:click="confirmDelete(group)">
+                <delete-icon></delete-icon>
+              </a>
+            </td>
+          </tr>
+        </template>
       </tbody>
     </table>
   </div>
@@ -79,11 +81,15 @@ export default {
     fetchGroups() {
       axios.get(this.group_url + "0").then(response => {
         response = response.data;
-        if(response.success){
+        if (response.success) {
           this.groups = response.data;
           EventBus.$emit("updateGroups", this.groups);
         } else {
-          this.$dialog.alert("<b>Error fetching groups</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          this.$dialog.alert(
+            "<b>Error fetching groups</b>: " +
+              response.message +
+              "<br><i>Check the console log for more information.</i>"
+          );
           console.log(response.exception);
         }
       });

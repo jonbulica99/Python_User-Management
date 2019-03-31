@@ -1,8 +1,8 @@
 <template>
-  <div class="users container">
+  <div class="users container card shadow-sm">
     <h1 class="page-header">Users</h1>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-hover table-responsive-sm">
+      <thead class="thead-light">
         <tr>
           <th>First name</th>
           <th>Last name</th>
@@ -14,34 +14,36 @@
           <th v-if="actions">Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="user in users">
-          <td>{{ user.firstname }}</td>
-          <td>{{ user.lastname }}</td>
-          <td>
-            <a v-bind:href="user_url + user.username">{{ user.username }}</a>
-          </td>
-          <td>{{ user.password }}</td>
-          <td>
-            <span v-for="group in user.joins.groups">
-              <a class="badge badge-secondary" v-bind:href="group_url + group.id">{{ group.name }}</a>
-              <span>&nbsp;</span>
-            </span>
-          </td>
-          <td>{{ user.joins.state }}</td>
-          <td v-if="user.publicKey">{{ user.publicKey }}</td>
-          <td v-else>
-            <i>None</i>
-          </td>
-          <td class="actions" v-if="actions">
-            <a class="btn btn-primary" v-on:click="editUser(user)">
-              <edit-icon></edit-icon>
-            </a>
-            <a class="btn btn-danger" v-on:click="confirmDelete(user)">
-              <delete-icon></delete-icon>
-            </a>
-          </td>
-        </tr>
+      <tbody v-bind:name="actions ? 'fade' : ''" is="transition-group">
+        <template v-for="user in users">
+          <tr v-bind:key="user.id">
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>
+              <a v-bind:href="user_url + user.username">{{ user.username }}</a>
+            </td>
+            <td>{{ user.password }}</td>
+            <td>
+              <span v-for="group in user.joins.groups" v-bind:key="group.id">
+                <a class="badge badge-secondary" v-bind:href="group_url + group.id">{{ group.name }}</a>
+                <span>&nbsp;</span>
+              </span>
+            </td>
+            <td>{{ user.joins.state }}</td>
+            <td v-if="user.publicKey">{{ user.publicKey }}</td>
+            <td v-else>
+              <i>None</i>
+            </td>
+            <td class="actions" v-if="actions">
+              <a class="btn btn-primary" v-on:click="editUser(user)">
+                <edit-icon></edit-icon>
+              </a>
+              <a class="btn btn-danger" v-on:click="confirmDelete(user)">
+                <delete-icon></delete-icon>
+              </a>
+            </td>
+          </tr>
+        </template>
       </tbody>
     </table>
   </div>
@@ -70,7 +72,7 @@ export default {
   mounted() {
     EventBus.$on("fetchUsers", () => {
       this.fetchUsers();
-    })
+    });
   },
   methods: {
     editUser(user) {
@@ -89,11 +91,15 @@ export default {
     fetchUsers() {
       axios.get(this.user_url + "all").then(response => {
         response = response.data;
-        if(response.success){
+        if (response.success) {
           this.users = response.data;
           EventBus.$emit("updateUsers", this.users);
         } else {
-          this.$dialog.alert("<b>Error fetching users</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          this.$dialog.alert(
+            "<b>Error fetching users</b>: " +
+              response.message +
+              "<br><i>Check the console log for more information.</i>"
+          );
           console.log(response.exception);
         }
       });

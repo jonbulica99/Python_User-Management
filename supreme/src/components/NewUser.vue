@@ -1,5 +1,5 @@
 <template>
-  <div class="new-user container">
+  <div class="new-user container card shadow-sm">
     <h1 class="page-header">{{ action }} User</h1>
     <hr>
     <form v-on:submit.prevent="handleUser()" v-on:reset="resetForm()">
@@ -10,6 +10,7 @@
             type="text"
             class="form-control"
             id="firstname"
+            ref="firstname"
             v-model="user.firstname"
             placeholder="Max"
             required
@@ -122,6 +123,9 @@ export default {
     EventBus.$on("editUser", data => {
       this.action = "Edit";
       this.user = data;
+      if (this.$refs.firstname) {
+        this.$refs.firstname.focus();
+      }
     });
     EventBus.$on("deleteUser", data => {
       this.action = "Delete";

@@ -1,15 +1,16 @@
 <template>
-  <div class="new-host container">
+  <div class="new-host container card shadow-sm">
     <h1 class="page-header">{{ action }} Host</h1>
     <hr>
     <form v-on:submit.prevent="handleHost()" v-on:reset="resetForm()">
       <div class="form-row">
         <div class="col-md-5 mb-3">
-          <label for="Hostname">Hostname</label>
+          <label for="hostname">Hostname</label>
           <input
             type="text"
             class="form-control"
-            id="Hostname"
+            id="hostname"
+            ref="hostname"
             v-model="host.name"
             placeholder="server.example.com"
             required
@@ -89,6 +90,9 @@ export default {
     EventBus.$on("editHost", data => {
       this.action = "Edit";
       this.host = data;
+      if (this.$refs.hostname) {
+        this.$refs.hostname.focus();
+      }
     });
     EventBus.$on("deleteHost", data => {
       this.action = "Delete";

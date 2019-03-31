@@ -1,15 +1,16 @@
 <template>
-  <div class="new-group container">
+  <div class="new-group container card shadow-sm">
     <h1 class="page-header">{{ action }} Group</h1>
     <hr>
     <form v-on:submit.prevent="handleGroup()" v-on:reset="resetForm()">
       <div class="form-row">
         <div class="col-md-4 mb-3">
-          <label for="firstname">Name</label>
+          <label for="groupname">Name</label>
           <input
             type="text"
             class="form-control"
-            id="firstname"
+            id="groupname"
+            ref="groupname"
             v-model="group.name"
             placeholder="Example"
             required
@@ -74,6 +75,9 @@ export default {
     EventBus.$on("editGroup", data => {
       this.action = "Edit";
       this.group = data;
+      if (this.$refs.groupname) {
+        this.$refs.groupname.focus();
+      }
     });
     EventBus.$on("deleteGroup", data => {
       this.action = "Delete";
