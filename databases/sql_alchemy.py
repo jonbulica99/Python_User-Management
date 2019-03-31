@@ -5,21 +5,9 @@ from utils.extras import safeformat
 
 __version__ = 0.1
 
-def db_consistent(func):
-    def func_wrapper(self, *args, **kwargs):
-        try:
-            result = func(self, *args, **kwargs)
-            return result
-        except BaseException as e:
-            if self.session:
-                self.log.error("Fatal error occured. Rolling back to ensure DB consistency. \n %s", e)
-                self.session.rollback()
-            else:
-                raise e
-    return func_wrapper
 
 class SqlAlchemy(BaseDB):
-    def __init__(self, database, dialect=None, implementation=None, version=__version__, *args, **kwargs):
+    def __init__(self, database, dialect=None, implementation=None, version=__version__, logging=False, *args, **kwargs):
         super().__init__(version=version, *args, **kwargs)
         self.database = database
         if dialect:
@@ -28,7 +16,7 @@ class SqlAlchemy(BaseDB):
             self.dialect = self.__class__.__name__.lower()
         if implementation:
             self.implementation = implementation
-        self.logging = kwargs.get("logging", False)
+        self.logging = logging
 
     def __own_logger(self):
         import logging

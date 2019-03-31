@@ -78,7 +78,7 @@ export default {
     },
     confirmDelete(user) {
       this.$dialog
-        .confirm("Do you really want to delete " + user.username + "?")
+        .confirm("Do you really want to delete <b>" + user.username + "</b>?")
         .then(function() {
           EventBus.$emit("deleteUser", user);
         })
@@ -88,8 +88,14 @@ export default {
     },
     fetchUsers() {
       axios.get(this.user_url + "all").then(response => {
-        this.users = response.data;
-        EventBus.$emit("updateUsers", this.users);
+        response = response.data;
+        if(response.success){
+          this.users = response.data;
+          EventBus.$emit("updateUsers", this.users);
+        } else {
+          this.$dialog.alert("<b>Error fetching users</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          console.log(response.exception);
+        }
       });
     }
   }

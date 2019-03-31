@@ -76,8 +76,14 @@ export default {
     },
     fetchHosts() {
       axios.get(this.host_url + "0").then(response => {
-        this.hosts = response.data;
-        EventBus.$emit("updateHosts", this.hosts);
+        response = response.data;
+        if(response.success){
+          this.hosts = response.data;
+          EventBus.$emit("updateHosts", this.hosts);
+        } else {
+          this.$dialog.alert("<b>Error fetching hosts</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          console.log(response.exception);
+        }
       });
     }
   }

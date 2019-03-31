@@ -90,38 +90,41 @@ export default {
       this.group.parent = this.parentValue;
 
       if (!this.group.name) {
-        this.$dialog.confirm("Please fill in the group name.");
+        this.$dialog.alert("Please fill in the group name.");
       } else if (!this.group.state) {
-        this.$dialog.confirm("Please select a valid group state.");
+        this.$dialog.alert("Please select a valid group state.");
       } else {
         if (this.action === "New") {
           axios.post(this.group_url + "0", this.group).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("Group " + response.data.group.name + " created successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.confirm("Group " + response.data.name + " created successfully.");
               EventBus.$emit("fetchGroups");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Add operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         } else if (this.action === "Edit") {
           axios.post(this.group_url + "1", this.group).then(response => {
-            let status = response.data.success;
-            if (status) {
+            response = response.data
+            if (response.success) {
               this.$dialog.confirm("Group " + this.group.name + " edited successfully.");
               EventBus.$emit("fetchGroups");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Edit operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         } else if (this.action === "Delete") {
           axios.post(this.group_url + "2", this.group).then(response => {
-            let status = response.data.success;
-            if (status) {
+            response = response.data
+            if (response.success) {
               this.$dialog.confirm("Group " + this.group.name + " deleted successfully.");
               EventBus.$emit("fetchGroups");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Delete operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         }
@@ -173,8 +176,6 @@ export default {
   }
 };
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 </style>

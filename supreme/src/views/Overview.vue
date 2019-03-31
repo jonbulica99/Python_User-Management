@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <Commands></Commands>
+    <br>
     <Users></Users>
     <Groups></Groups>
     <Hosts></Hosts>
@@ -11,6 +13,7 @@
 import Users from '@/components/Users.vue'
 import Groups from '@/components/Groups.vue'
 import Hosts from '@/components/Hosts.vue'
+import Commands from '@/components/Commands.vue'
 
 
 export default {
@@ -18,7 +21,8 @@ export default {
   components: {
     Users,
     Groups,
-    Hosts
+    Hosts,
+    Commands
   }
 }
 </script>

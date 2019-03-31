@@ -29,6 +29,17 @@
       </div>
       <div class="form-row">
         <div class="col-md-4 mb-3">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            v-model="user.username"
+            placeholder="maxmustermann"
+            required
+          >
+        </div>
+        <div class="col-md-4 mb-3">
           <label for="password">Password</label>
           <input
             type="password"
@@ -122,9 +133,16 @@ export default {
     })
   },
   created: function() {
-    axios.get(this.group_url + "0").then(response => {
-      this.groups = response.data;
-    });
+      axios.get(this.group_url + "0").then(response => {
+        response = response.data;
+        if(response.success){
+          this.groups = response.data;
+          EventBus.$emit("updateGroups", this.groups);
+        } else {
+          this.$dialog.alert("<b>Error fetching groups</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          console.log(response.exception);
+        }
+      });
   },
   methods: {
     handleUser() {
@@ -132,38 +150,41 @@ export default {
       this.user.groups = this.groupsValue;
 
       if (!this.user.firstname || !this.user.lastname) {
-        this.$dialog.confirm("Please fill in first and last name.");
+        this.$dialog.alert("Please fill in first and last name.");
       } else if (!this.user.state) {
-        this.$dialog.confirm("Please select a valid user state.");
+        this.$dialog.alert("Please select a valid user state.");
       } else {
         if (this.action === "New") {
           axios.post(this.user_url + "new", this.user).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("User " + response.data.user.username + " created successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.alert("User <b>" + response.data.username + "</b> created successfully.");
               EventBus.$emit("fetchUsers");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Add operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         } else if (this.action === "Edit") {
           axios.post(this.user_url + "edit", this.user).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("User " + this.user.username + " edited successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.alert("User <b>" + this.user.username + "</b> edited successfully.");
               EventBus.$emit("fetchUsers");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Edit operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         } else if (this.action === "Delete") {
           axios.post(this.user_url + "delete", this.user).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("User " + this.user.username + " deleted successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.alert("User <b>" + this.user.username + "</b> deleted successfully.");
               EventBus.$emit("fetchUsers");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Delete operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         }
@@ -213,8 +234,6 @@ export default {
   }
 };
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 </style>

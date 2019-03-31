@@ -100,47 +100,57 @@ export default {
     });
   },
   created: function() {
-    axios.get(this.user_url + "all").then(response => {
-      this.users = response.data;
-    });
+      axios.get(this.user_url + "all").then(response => {
+        response = response.data;
+        if(response.success){
+          this.users = response.data;
+          EventBus.$emit("updateUsers", this.users);
+        } else {
+          this.$dialog.alert("<b>Error fetching users</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          console.log(response.exception);
+        }
+      });
   },
   methods: {
     handleHost() {
       this.host.user = this.userValue;
 
       if (!this.host.name) {
-        this.$dialog.confirm("Please fill in the hostname.");
+        this.$dialog.alert("Please fill in the hostname.");
       } else if (!this.host.user && this.action != "Delete") {
-        this.$dialog.confirm("Please select a valid user to use for connecting to the host.");
+        this.$dialog.alert("Please select a valid user to use for connecting to the host.");
       } else {
         if (this.action === "New") {
           axios.post(this.host_url + "0", this.host).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("Host " + response.data.host.name + " created successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.alert("Host <b>" + response.data.name + "</b> created successfully.");
               EventBus.$emit("fetchHosts");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Add operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         } else if (this.action === "Edit") {
           axios.post(this.host_url + "1", this.host).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("Host " + this.host.name + " edited successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.alert("Host <b>" + response.data.name + "</b> edited successfully.");
               EventBus.$emit("fetchHosts");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Edit operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         } else if (this.action === "Delete") {
           axios.post(this.host_url + "2", this.host).then(response => {
-            let status = response.data.success;
-            if (status) {
-              this.$dialog.confirm("Host " + this.host.name + " deleted successfully.");
+            response = response.data
+            if (response.success) {
+              this.$dialog.alert("Host <b>" + response.data.name + "</b> deleted successfully.");
               EventBus.$emit("fetchHosts");
             } else {
-              this.$dialog.confirm(response.data.message);
+              this.$dialog.alert("<b>Delete operation failed</b>: " + response.message); 
+              console.log(response.exception);
             }
           });
         }
@@ -174,8 +184,6 @@ export default {
   }
 };
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 </style>

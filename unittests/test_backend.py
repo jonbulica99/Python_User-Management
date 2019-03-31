@@ -16,7 +16,7 @@ class SshCommandTests(unittest.TestCase):
         cmd = user.get()
         self.assertEqual(
             cmd,
-            "useradd '--comment' 'Max Mustermann' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("hunter2"))
+            "useradd '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("hunter2"))
         )
 
     def test_useradd2(self):
@@ -28,7 +28,7 @@ class SshCommandTests(unittest.TestCase):
         cmd = user.get()
         self.assertEqual(
             cmd,
-            "useradd '--comment' 'Max Mustermann' '--shell' '/bin/bash' '--password' '{}' '--groups' 'root,www-data' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("supersecure"))
+            "useradd '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' '--groups' 'root,www-data' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("supersecure"))
         )
 
     def test_usermod(self):

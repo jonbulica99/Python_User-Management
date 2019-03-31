@@ -51,6 +51,9 @@ class UserAdd(BaseCommand):
         # set full name
         args["--comment"] = "{} {}".format(self.first_name, self.last_name)
 
+        # make sure to create home die
+        args["--create-home"] = None
+
         # check if we should disable user
         if self.active:
             args["--shell"] = "/bin/bash"

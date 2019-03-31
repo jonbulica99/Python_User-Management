@@ -68,7 +68,7 @@ export default {
     },
     confirmDelete(group) {
       this.$dialog
-        .confirm("Do you really want to delete " + group.name + "?")
+        .confirm("Do you really want to delete <b>" + group.name + "</b>?")
         .then(function() {
           EventBus.$emit("deleteGroup", group);
         })
@@ -78,8 +78,14 @@ export default {
     },
     fetchGroups() {
       axios.get(this.group_url + "0").then(response => {
-        this.groups = response.data;
-        EventBus.$emit("updateGroups", this.groups);
+        response = response.data;
+        if(response.success){
+          this.groups = response.data;
+          EventBus.$emit("updateGroups", this.groups);
+        } else {
+          this.$dialog.alert("<b>Error fetching groups</b>: " + response.message + "<br><i>Check the console log for more information.</i>"); 
+          console.log(response.exception);
+        }
       });
     }
   }

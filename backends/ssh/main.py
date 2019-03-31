@@ -46,6 +46,7 @@ class SshBackend(BaseBackend):
             self.connection.open()
         except Exception as e:
             self.log.error('SSH connection failure: %s', e)
+            raise e
 
         if self.connection.is_connected:
             self.log.debug('Successfully established ssh connection: %s@%s',
