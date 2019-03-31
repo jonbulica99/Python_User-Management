@@ -2,9 +2,11 @@
   <div class="home">
     <Commands></Commands>
     <br>
-    <Users></Users>
-    <Groups></Groups>
-    <Hosts></Hosts>
+    <div class="container">
+      <Users></Users>
+      <Groups></Groups>
+      <Hosts></Hosts>
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="hosts-page">
+  <div class="hosts-page container">
     <Hosts actions></Hosts>
     <NewHost></NewHost>
   </div>

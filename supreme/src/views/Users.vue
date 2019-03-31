@@ -1,5 +1,5 @@
 <template>
-  <div class="users-page">
+  <div class="users-page container">
     <Users actions></Users>
     <NewUser></NewUser>
   </div>
