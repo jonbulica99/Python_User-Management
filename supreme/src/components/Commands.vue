@@ -30,7 +30,7 @@
               <b>{{ progress.current.host.name }}</b>.
             </p>
             <div class="row">
-              <div v-if="progress.success && progress.success.length" class="card shadow-sm">
+              <div v-if="progress.success && progress.success.length" class="card text-white bg-success shadow-sm">
                 <div class="card-body">
                   <h5 class="card-title">Successful hosts</h5>
                   <div class="card-text">
@@ -38,7 +38,7 @@
                   </div>
                 </div>
               </div>
-              <div v-if="progress.error && progress.error.length" class="card shadow-sm">
+              <div v-if="progress.error && progress.error.length" class="card text-white bg-danger shadow-sm">
                 <div class="card-body">
                   <h5 class="card-title">Failed hosts</h5>
                   <div class="card-text">
