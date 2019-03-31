@@ -14,6 +14,14 @@ git submodule update --init --recursive
 python3 -m pip install -r requirements.txt
 ```
 
+3. Frontend [herunterladen](https://github.com/jonbulica99/Python_User-Management/releases) und nach `./supreme/dist` entpacken.
+
+4. App- und Datenbank-Einstellungen unter `config/main.ini` anpassen.
+
+5. Programm mittels `python3 main.py` starten. Standardmäßig wird vSupreme unter [localhost:8090](http://localhost:8090) angeboten.
+
+6. Profit?
+
 ## TODO
 1. Use-Case-Diagramm
 2. Klassendiagramm
@@ -58,4 +66,5 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 - [x] Nutzer haben einen Status („Present“, „Deactivatet“,  „Deleted“). Entsprechend dem Status ist auf den Zielsystemen der Nutzer vorhanden, deaktiviert oder gelöscht. Beim Löschen soll auch das Homeverzeichnis des Users gelöscht werden.
 - [x] Die öffentlichen SSH-Keys der Nutzer sind in der Datenbank vorhanden und werden beim Anlegen des Nutzers als "authorized keys" auf dem Zielsystem gespeichert.
 - [ ] Die Tests werden automatisiert in einer Continous Integration Umgebung ausgeführt.
+  Kein Bock auf diese.
 - [x] Sie haben einen Integrationstest geschrieben, der z. B. das Linuxsystem oder die Datenbank „mockt“.
