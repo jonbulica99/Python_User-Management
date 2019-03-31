@@ -83,7 +83,7 @@ class CommandEndpoint(BaseEndpoint):
             if thread_id:
                 progress = self.threads[thread_id].progress
                 progress["thread_id"] = thread_id
-                if progress["error"]:
+                if progress["error"] and not progress["current"]["host"]:
                     self.error_message = "Deployment failed for some hosts."
                     return self.return_error(Exception(self.error_message), data=progress)
                 return self.return_success(progress)
