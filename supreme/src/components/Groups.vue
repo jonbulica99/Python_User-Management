@@ -12,7 +12,7 @@
       </thead>
       <tbody v-bind:name="actions ? 'fade' : ''" is="transition-group">
         <template v-for="group in groups">
-          <tr v-bind:key="group.id">
+          <tr v-bind:key="group.id" @click="editGroup(group)">
             <td>{{ group.name }}</td>
             <td>{{ group.joins.state }}</td>
             <td>
@@ -25,10 +25,10 @@
               </div>
             </td>
             <td class="actions" v-if="actions">
-              <a class="btn btn-primary" v-on:click="editGroup(group)">
+              <a class="btn btn-primary" @click="editGroup(group)">
                 <edit-icon></edit-icon>
               </a>
-              <a class="btn btn-danger" v-on:click="confirmDelete(group)">
+              <a class="btn btn-danger" @click="confirmDelete(group)">
                 <delete-icon></delete-icon>
               </a>
             </td>

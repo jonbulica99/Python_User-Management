@@ -13,7 +13,7 @@
       </thead>
       <tbody v-bind:name="actions ? 'fade' : ''" is="transition-group">
         <template v-for="host in hosts">
-          <tr v-bind:key="host.id">
+          <tr v-bind:key="host.id" @click="editHost(host)">
             <td>
               <a v-bind:href="host_url + host.id">{{ host.name }}</a>
             </td>
@@ -23,10 +23,10 @@
               <a v-bind:href="user_url + host.joins.user.username">{{ host.joins.user.username }}</a>
             </td>
             <td class="actions" v-if="actions">
-              <a class="btn btn-primary" v-on:click="editHost(host)">
+              <a class="btn btn-primary" @click="editHost(host)">
                 <edit-icon></edit-icon>
               </a>
-              <a class="btn btn-danger" v-on:click="confirmDelete(host)">
+              <a class="btn btn-danger" @click="confirmDelete(host)">
                 <delete-icon></delete-icon>
               </a>
             </td>

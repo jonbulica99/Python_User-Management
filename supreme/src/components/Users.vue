@@ -16,7 +16,7 @@
       </thead>
       <tbody v-bind:name="actions ? 'fade' : ''" is="transition-group">
         <template v-for="user in users">
-          <tr v-bind:key="user.id">
+          <tr v-bind:key="user.id" @click="editUser(user)">
             <td>{{ user.firstname }}</td>
             <td>{{ user.lastname }}</td>
             <td>
@@ -35,10 +35,10 @@
               <i>None</i>
             </td>
             <td class="actions" v-if="actions">
-              <a class="btn btn-primary" v-on:click="editUser(user)">
+              <a class="btn btn-primary" @click="editUser(user)">
                 <edit-icon></edit-icon>
               </a>
-              <a class="btn btn-danger" v-on:click="confirmDelete(user)">
+              <a class="btn btn-danger" @click="confirmDelete(user)">
                 <delete-icon></delete-icon>
               </a>
             </td>
