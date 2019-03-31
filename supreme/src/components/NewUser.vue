@@ -35,7 +35,7 @@
             type="text"
             class="form-control"
             id="username"
-            v-model="user.username"
+            v-model="usernameValue"
             placeholder="maxmustermann"
             required
           >
@@ -152,6 +152,7 @@ export default {
     handleUser() {
       this.user.state = this.stateValue;
       this.user.groups = this.groupsValue;
+      this.user.username = this.usernameValue;
 
       if (!this.user.firstname || !this.user.lastname) {
         this.$dialog.alert("Please fill in first and last name.");
@@ -233,6 +234,24 @@ export default {
         } else {
           this.user.joins.state = newVal;
         }
+      }
+    },
+    usernameValue: {
+      get() {
+        if (this.action === "New" && !this.user.username) {
+          let value = '';
+          if (this.user.firstname) {
+            value += this.user.firstname;
+          }
+          if(this.user.lastname) {
+            value += this.user.lastname;
+          }
+          return value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').toLowerCase();
+        }
+        return this.user.username;
+      },
+      set(newVal) {
+        this.user.username = newVal;
       }
     }
   }
