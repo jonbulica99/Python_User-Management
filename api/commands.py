@@ -97,6 +97,7 @@ class CommandEndpoint(BaseEndpoint):
     def post(self, command):
         if self.Command(command) == self.Command.InsertDefaults:
             try:
+                db.create_all()
                 self.db_manager.insert_default_values()
             except Exception as e:
                 self.error_message = "Something went wrong. Did you run this more than once?"
