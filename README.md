@@ -22,10 +22,6 @@ python3 -m pip install -r requirements.txt
 
 6. Profit?
 
-## TODO
-1. Use-Case-Diagramm
-2. Klassendiagramm
-
 
 ## Unit-Tests
 Diese können mittels folgenden Befehles ausgeführt werden:
