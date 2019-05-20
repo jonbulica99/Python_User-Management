@@ -37,7 +37,7 @@ class SshCommandTests(unittest.TestCase):
         cmd = user.get()
         self.assertEqual(
             cmd,
-            "usermod '--comment' 'Max Mustermann' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("hunter2"))
+            "usermod '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("hunter2"))
         )
 
     def test_userdel(self):
