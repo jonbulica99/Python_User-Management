@@ -1,8 +1,8 @@
-mysqlclient
-sqlalchemy
-sqlalchemy_utils
 fabric
 flask
 flask_cors
 flask_restful
 flask_sqlalchemy
+sqlalchemy
+sqlalchemy_utils
+mysqlclient
