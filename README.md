@@ -62,6 +62,5 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 
 - [x] Nutzer haben einen Status („Present“, „Deactivatet“,  „Deleted“). Entsprechend dem Status ist auf den Zielsystemen der Nutzer vorhanden, deaktiviert oder gelöscht. Beim Löschen soll auch das Homeverzeichnis des Users gelöscht werden.
 - [x] Die öffentlichen SSH-Keys der Nutzer sind in der Datenbank vorhanden und werden beim Anlegen des Nutzers als "authorized keys" auf dem Zielsystem gespeichert.
-- [ ] Die Tests werden automatisiert in einer Continous Integration Umgebung ausgeführt.
-  Kein Bock auf diese.
+- [x] Die Tests werden automatisiert in einer Continous Integration Umgebung ausgeführt.
 - [x] Sie haben einen Integrationstest geschrieben, der z. B. das Linuxsystem oder die Datenbank „mockt“.
