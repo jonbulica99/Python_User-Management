@@ -1,4 +1,5 @@
 # Python_User-Management
+[![Build Status](https://travis-ci.org/jonbulica99/Python_User-Management.svg?branch=master)](https://travis-ci.org/jonbulica99/Python_User-Management)
 
 ## Aufsetzung Step-by-Step
 
