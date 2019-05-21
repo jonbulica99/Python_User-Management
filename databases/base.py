@@ -1,17 +1,13 @@
 from enum import Enum
-from utils.log import Logger
+from base import BaseObject
 from utils.decorators import notimplemented
 
 __version__ = 0.2
 
 
-class BaseDB:
+class BaseDB(BaseObject):
     def __init__(self, name=None, version=__version__, *args, **kwargs):
-        if not name:
-            name = self.__class__.__name__
-        self.name = name
-        self.version = version
-        self.log = Logger(name).get()
+        super().__init__(name, version, *args, **kwargs)
         self.log.debug("Initialized %s DB v%s", name, version)
         self.db = None
 
