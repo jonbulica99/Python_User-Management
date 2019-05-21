@@ -78,3 +78,13 @@ Um dies zu vereinfachen, haben wir uns entschieden, dies durch eine `__init__`-D
 Die Funktion der Datei beinhaltet, dass alle Dateien im `unittests`-Verzeichniss überprüft werden.
 Inhaltende Test werden ausgeführt.
 Somit wurde es vereinheitlicht, daher müssen wir für unseren CI nur einen Behfehl ausführen.
+
+### Duplizierter Code
+
+Problem:
+Wir haben in den ersten 5 Zeilen eines Codeblockes entdeckt, dass der Code weitesgehend identisch ist.
+
+Lösung:
+Um dieses Problem zu beheben, haben wir eine wietere Klasse namens `BaseObjekt` hinzugefügt.
+Der Inhalt der Zeilen wird somit vererbt, dadurch sparen wir Code. Außerdem müssen somit weitere Änderungen nur an einer 
+stelle angepasst werden.
