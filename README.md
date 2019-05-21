@@ -69,4 +69,12 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 ## Refactoring
 
 ### Unit-Tests werden automatisch ausgeführt
-...
+
+Voher:
+Test mussten einzeln ausgefürht werden.
+
+Nachher:
+Um dies zu vereinfachen, haben wir uns entschieden, dies durch eine `__init__`-Datei zu ersetzten. 
+Die Funktion der Datei beinhaltet, dass alle Dateien im `unittests`-Verzeichniss überprüft werden.
+Inhaltende Test werden ausgeführt.
+Somit wurde es vereinheitlicht, daher müssen wir für unseren CI nur einen Behfehl ausführen.
