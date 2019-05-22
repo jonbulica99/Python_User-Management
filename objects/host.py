@@ -10,11 +10,11 @@ class Host(db.Model, BaseObject):
 
     user = db.relationship('User')
 
-    def __init__(self, name, address, user, port=22, *args, **kwargs):
-        self.name = name
-        self.address = address
-        self.port = port
+    def __init__(self, user, *args, **kwargs):
         self.user = user
+        self.name = kwargs.get('name')
+        self.address = kwargs.get('address')
+        self.port = kwargs.get('port', 22)
         self.userID = user.id
 
     def __repr__(self):

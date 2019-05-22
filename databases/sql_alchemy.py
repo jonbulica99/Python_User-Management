@@ -7,16 +7,13 @@ __version__ = 0.1
 
 
 class SqlAlchemy(BaseDB):
-    def __init__(self, database, dialect=None, implementation=None, logging=False, *args, **kwargs):
+    def __init__(self, implementation=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.database = database
-        if dialect:
-            self.dialect = dialect
-        else:
-            self.dialect = self.__class__.__name__.lower()
+        self.logging = kwargs.get('logging', False)
+        self.database = kwargs.get('database')
+        self.dialect = kwargs.get('dialect', self.__class__.__name__.lower())
         if implementation:
             self.implementation = implementation
-        self.logging = logging
 
     def __own_logger(self):
         import logging
@@ -49,7 +46,8 @@ class SqlAlchemy(BaseDB):
         self.log.debug("Checking if database exists")
         try:
             if not database_exists(impl):
-                self.log.warn("Database '%s' not found. Creating it now!", self.database)
+                self.log.warn(
+                    "Database '%s' not found. Creating it now!", self.database)
                 create_database(impl)
             self.log.info("Attempting flask integration...")
             flask_app.config['SQLALCHEMY_DATABASE_URI'] = impl

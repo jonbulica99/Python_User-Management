@@ -13,13 +13,13 @@ class User(db.Model, BaseObject):
     state = db.relationship('State')
     groups = db.relationship('Group', secondary="group_has_users")
 
-    def __init__(self, state, firstname, lastname, password, publicKey=None, username=None, *args, **kwargs):
+    def __init__(self, state, username=None, *args, **kwargs):
         self.state = state
         self.stateID = state.id
-        self.firstname = firstname
-        self.lastname = lastname
-        self.password = password
-        self.publicKey = publicKey
+        self.firstname = kwargs.get('firstname')
+        self.lastname = kwargs.get('lastname')
+        self.password = kwargs.get('password')
+        self.publicKey = kwargs.get('publicKey', None)
         self.username = self.get_username(username)
 
     def get_username(self, username):

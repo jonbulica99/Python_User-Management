@@ -6,17 +6,17 @@ from utils.decorators import expect
 
 class UserAdd(BaseCommand):
     @expect(ImportError, "Only UNIX systems support crypt!")
-    def __init__(self, first_name, last_name, password, username=None, groups=None, active=True, pubkey=None, change_pwd_on_first_login=True):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.password = password
-        if not username:
-            username = (first_name + last_name).lower()
-        self.username = username
-        self.groups = groups
-        self.active = active
-        self.pubkey = pubkey
-        self.change_pwd_on_first_login = change_pwd_on_first_login
+    def __init__(self, *args, **kwargs):
+        self.first_name = kwargs.get('first_name')
+        self.last_name = kwargs.get('last_name')
+        self.password = kwargs.get('password')
+        self.username = kwargs.get(
+            'username', (self.first_name + self.last_name).lower())
+        self.groups = kwargs.get('groups', None)
+        self.active = kwargs.get('active', True)
+        self.pubkey = kwargs.get('pubkey', None)
+        self.change_pwd_on_first_login = kwargs.get(
+            'change_pwd_on_first_login', True)
         from helpers.crypt_helper import crypt
         self._crypt = crypt
         self.salt = crypt.mksalt(crypt.METHOD_SHA512)
