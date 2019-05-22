@@ -6,7 +6,7 @@ class Memory(Sqlite):
 
     def __init__(self, *args, **kwargs):
         kwargs.pop("database")
-        super().__init__(database="", *args, **kwargs)
+        super().__init__(database="", dialect="sqlite", *args, **kwargs)
         self.check_if_enough_memory()
 
     def check_if_enough_memory(self, warn_percent=80, crit_percent=95, default=True):
