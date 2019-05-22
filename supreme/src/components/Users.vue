@@ -37,7 +37,7 @@
               </span>
             </td>
             <td>{{ user.joins.state }}</td>
-            <td v-if="user.publicKey">{{ user.publicKey }}</td>
+            <td v-if="user.publicKey">{{ user.publicKey.substring(0,10) + ".." }}</td>
             <td v-else>
               <i>None</i>
             </td>

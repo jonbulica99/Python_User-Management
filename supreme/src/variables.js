@@ -10,7 +10,7 @@ export const routerOptions = [
     { path: '/about', component: 'About' }
 ];
 
-export const API_BASE_URL = "http://jon.kunden.inmedias.it/api/v1/";
+export const API_BASE_URL = "http://localhost:8090/api/v1/";
 export const Endpoints = {
     HOSTS: API_BASE_URL + "hosts/",
     USERS: API_BASE_URL + "users/",
