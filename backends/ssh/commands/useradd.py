@@ -19,7 +19,7 @@ class UserAdd(BaseCommand):
         self.active = active
         self.pubkey = pubkey
         self.change_pwd_on_first_login = change_pwd_on_first_login
-        import crypt
+        from helpers.crypt import crypt
         self._crypt = crypt
         self.salt = crypt.mksalt(crypt.METHOD_SHA512)
         super().__init__(__supported_os__)

@@ -70,21 +70,40 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 
 ### Unit-Tests werden automatisch ausgeführt
 
-Voher:
+#### Problem
 Test mussten einzeln ausgefürht werden.
 
-Nachher:
-Um dies zu vereinfachen, haben wir uns entschieden, dies durch eine `__init__`-Datei zu ersetzten. 
-Die Funktion der Datei beinhaltet, dass alle Dateien im `unittests`-Verzeichniss überprüft werden.
+#### Lösung
+Um dies zu vereinfachen, haben wir uns entschieden, dies durch eine `__main__`-Datei zu ersetzten. 
+Die Funktion der Datei beinhaltet, dass alle Dateien im `tests`-Verzeichniss überprüft werden.
 Inhaltende Test werden ausgeführt.
 Somit wurde es vereinheitlicht, daher müssen wir für unseren CI nur einen Behfehl ausführen.
 
 ### Duplizierter Code
 
-Problem:
-Wir haben in den ersten 5 Zeilen eines Codeblockes entdeckt, dass der Code weitesgehend identisch ist.
+#### Problem
+Wir haben in den ersten 5 Zeilen eines Codeblockes entdeckt, dass der Code weitestgehend identisch ist.
 
-Lösung:
-Um dieses Problem zu beheben, haben wir eine wietere Klasse namens `BaseObjekt` hinzugefügt.
+#### Lösung
+Um dieses Problem zu beheben, haben wir eine wietere Klasse namens `BaseObject` hinzugefügt.
 Der Inhalt der Zeilen wird somit vererbt, dadurch sparen wir Code. Außerdem müssen somit weitere Änderungen nur an einer 
 stelle angepasst werden.
+
+### Windows-Unterstützung
+
+#### Problem
+Das Python-Modul `crypt` ist lediglich ein Wrapper für die native [CRYPT(3)](http://man7.org/linux/man-pages/man3/crypt.3.html) Implmentierung in *nix.
+Dies bedeutet, dass der Server zwar auf Windows ausgeführt werden kann, es können jedoch keine Benutzer ausgerollt werden, weil dafür `crypt` erforderlich ist.
+
+#### Lösung
+Das erste, was einem auffällt, ist den entsprechenden `UserAdd`-Befehl so anzupassen, dass das Kennwort durch eine Subshell auf dem Client gehasht wird. Dies könnte folgendermaßen aussehen:
+
+```python
+# UserAdd
+def get_encrypted_password(self, password):
+    return "$(openssl passwd -crypt '{}')".format(password)
+```
+
+Dies würde zwar funktionieren, allerdings müsste in diesem Fall das Kennwort im Plaintext übertragen und ausgeführt werden. Sicherheitstechnisch ist dies keine gute Idee.
+
+Daher haben wir uns für eine reine Python-Implementierung entschieden: `pcrypt`. Da diese laut Entwickler 5 Mal so langsam als die native ist, wird es nur dann verwendet, wenn Letzteres nicht vorhanden ist.
