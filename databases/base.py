@@ -2,13 +2,13 @@ from enum import Enum
 from base import BaseObject
 from utils.decorators import notimplemented
 
-__version__ = 0.2
-
 
 class BaseDB(BaseObject):
-    def __init__(self, name=None, version=__version__, *args, **kwargs):
-        super().__init__(name, version, *args, **kwargs)
-        self.log.debug("Initialized %s DB v%s", name, version)
+    __version__ = 0.2
+
+    def __init__(self, name=None, *args, **kwargs):
+        super().__init__(name, *args, **kwargs)
+        self.log.debug("Initialized %s DB v%s", name, self.__version__)
         self.db = None
 
     def describe(self):
@@ -45,8 +45,8 @@ class BaseDB(BaseObject):
         else:
             self.log.error("Cannot insert invalid object: %s", obj)
 
-    def add_objects(self, list):
-        for obj in list:
+    def add_objects(self, obj_list):
+        for obj in obj_list:
             self.add_object(obj)
 
     def remove_object(self, obj):
@@ -56,8 +56,8 @@ class BaseDB(BaseObject):
         else:
             self.log.error("Cannot remove invalid object: %s", obj)
     
-    def remove_objects(self, list):
-        for obj in list:
+    def remove_objects(self, obj_list):
+        for obj in obj_list:
             self.remove_object(obj)
 
     @notimplemented

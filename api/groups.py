@@ -1,11 +1,11 @@
 from api.base import *
 
-__version__ = 0.1
-
 
 class GroupEndpoint(BaseEndpoint):
-    def __init__(self, version=__version__, *args, **kwargs):
-        super().__init__(version=version, *args, **kwargs)
+    __version__ = 0.1
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.parser.add_argument('id', type=str)
         self.parser.add_argument('name', type=str)
         self.parser.add_argument('state', type=str)

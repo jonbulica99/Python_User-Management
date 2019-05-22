@@ -1,3 +1,4 @@
+from base import BaseObject
 from objects import *
 from enum import Enum
 from flask_restful import Resource, reqparse
@@ -5,26 +6,21 @@ from databases.sql_alchemy import SqlAlchemy
 from utils.log import Logger
 from utils.decorators import notimplemented
 
-__version__ = 0.1
 
+class BaseEndpoint(BaseObject, Resource):
+    __version__ = 0.2
 
-class BaseEndpoint(Resource):
     class Method(Enum):
         Add = 0
         Edit = 1
         Delete = 2
 
-    def __init__(self, name=None, version=__version__, *args, **kwargs):
-        if not name:
-            name = self.__class__.__name__
-        self.name = name
-        self.version = version
-        self.log = Logger(name).get()
-        self.log.debug("Initialized %s v%s", name, version)
+    def __init__(self, *args, **kwargs):
         self.parser = reqparse.RequestParser()
         self.success_message = "Operation executed successfully."
         self.error_message = "Something went terribly wrong. Please consult your system administrator for further assistance."
         super().__init__(*args, **kwargs)
+        self.log.debug("Initialized %s v%s", self.name, self.__version__)
 
     @classmethod
     def create(cls, database):

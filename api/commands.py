@@ -4,8 +4,6 @@ from threading import Thread
 from backends.ssh.main import SshBackend
 from helpers.user_manager import UserManager
 
-__version__ = 0.1
-
 
 class DeployBackground(Thread):
     def __init__(self, context):
@@ -13,15 +11,15 @@ class DeployBackground(Thread):
         self.log = Logger("DeployBackground").get()
         self.app = context
         self.progress = {
-        "command": "deploy_all",
-        "percent": 0.0,
-        "current": {
-            "host": None,
-            "object": None
-        },
-        "success": [],
-        "error": []
-    }
+            "command": "deploy_all",
+            "percent": 0.0,
+            "current": {
+                "host": None,
+                "object": None
+            },
+            "success": [],
+            "error": []
+        }
 
     def run(self):
         with self.app.app_context():
@@ -42,23 +40,29 @@ class DeployBackground(Thread):
                     ssh.connect()
                     user_manager = UserManager(backend=ssh)
                     for g, group in enumerate(groups, 1):
-                        self.progress["percent"] = 0.5*(g/len_groups)*i/len_hosts * 100
-                        self.progress["current"]["object"] = group.thread_safe_dict()
+                        self.progress["percent"] = 0.5 * \
+                            (g/len_groups)*i/len_hosts * 100
+                        self.progress["current"]["object"] = group.thread_safe_dict(
+                        )
                         user_manager.handle_group(group)
                     for u, user in enumerate(users, 1):
-                        self.progress["percent"] = (u/len_users)*i/len_hosts * 100
+                        self.progress["percent"] = (
+                            u/len_users)*i/len_hosts * 100
                         self.progress["current"]["object"] = user.thread_safe_dict()
                         user_manager.handle_user(user)
                     self.log.info("Deployment succeded for %s", host)
                     self.progress["success"].append(host.thread_safe_dict())
                 except Exception as e:
-                    self.log.error("Deployment failed for %s. Error %s", host, e)
+                    self.log.error(
+                        "Deployment failed for %s. Error %s", host, e)
                     self.progress["error"].append(host.thread_safe_dict())
                 self.progress["percent"] = i/len_hosts * 100
                 self.progress["current"] = {"host": None, "object": None}
 
 
 class CommandEndpoint(BaseEndpoint):
+    __version__ = 0.1
+
     class Command(Enum):
         InsertDefaults = "insert_defaults"
         DeployAll = "deploy_all"
@@ -66,8 +70,9 @@ class CommandEndpoint(BaseEndpoint):
         ForceRollback = "force_rollback"
 
     threads = {}
-    def __init__(self, version=__version__, *args, **kwargs):
-        super().__init__(version=version, *args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.parser.add_argument('thread', type=int)
         self.db = self.db_manager.db
 

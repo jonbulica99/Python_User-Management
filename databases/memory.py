@@ -1,12 +1,12 @@
 from databases.sqlite import Sqlite
 
-__version__ = 0.1
-
 
 class Memory(Sqlite):
+    __version__ = 0.1
+
     def __init__(self, *args, **kwargs):
         kwargs.pop("database")
-        super().__init__(database="", version=__version__, *args, **kwargs)
+        super().__init__(database="", *args, **kwargs)
         self.check_if_enough_memory()
 
     def check_if_enough_memory(self, warn_percent=80, crit_percent=95, default=True):

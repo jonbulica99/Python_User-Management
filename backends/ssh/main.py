@@ -5,18 +5,16 @@ from enum import Enum
 
 import os
 
-__version__ = 0.1
-
 
 class SshBackend(BaseBackend):
-    # http://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
-    #init_cmd = 'source ~/.bashrc && echo $PATH'
-    init_cmd = 'echo $PATH'
+    __version__ = 0.2
 
+    # http://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
+    init_cmd = 'echo $PATH'
     look_for_keys = True
 
     def __init__(self, host, user=None, *args, **kwargs):
-        super().__init__(version=__version__, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.host = host
         if not user:
             user = host.user
@@ -37,8 +35,8 @@ class SshBackend(BaseBackend):
                                      user=self.user.username,
                                      port=self.host.port or 22,
                                      connect_kwargs={
-                                        'password': self.user.password,
-                                        'look_for_keys': self.look_for_keys
+                                         'password': self.user.password,
+                                         'look_for_keys': self.look_for_keys
                                      },
                                      config=self.config)
 
@@ -83,7 +81,7 @@ class SshBackend(BaseBackend):
                 else:
                     out = self.connection.run(command, warn=True)
                 if out.return_code:
-                    break # If there are any errors, stop the execution
+                    break  # If there are any errors, stop the execution
             return out.return_code, out.stdout, out.stderr
 
     def close(self):

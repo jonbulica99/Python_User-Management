@@ -7,8 +7,8 @@ __version__ = 0.1
 
 
 class SqlAlchemy(BaseDB):
-    def __init__(self, database, dialect=None, implementation=None, version=__version__, logging=False, *args, **kwargs):
-        super().__init__(version=version, *args, **kwargs)
+    def __init__(self, database, dialect=None, implementation=None, logging=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.database = database
         if dialect:
             self.dialect = dialect
