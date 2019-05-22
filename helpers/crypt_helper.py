@@ -1,4 +1,6 @@
-try:
+import os
+
+if 'posix' in os.name:
     import crypt
-except ImportError:
+else:
     import pcrypt as crypt

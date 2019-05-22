@@ -1,14 +1,12 @@
 from backends.command import BaseCommand
 from objects.group import Group
 
-__supported_os__ = ["Linux"]
-
 
 class GroupAdd(BaseCommand):
     def __init__(self, name, system_group=False):
         self.groupname = name
         self.system_group = system_group
-        super().__init__(__supported_os__)
+        super().__init__()
 
     @staticmethod
     def from_group(group: Group):

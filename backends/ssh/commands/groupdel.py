@@ -1,13 +1,11 @@
 from backends.command import BaseCommand
 from objects.group import Group
 
-__supported_os__ = ["Linux"]
-
 
 class GroupDel(BaseCommand):
     def __init__(self, name):
         self.groupname = name
-        super().__init__(__supported_os__)
+        super().__init__()
 
     @staticmethod
     def from_group(group: Group):

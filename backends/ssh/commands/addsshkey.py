@@ -1,15 +1,13 @@
 from backends.command import BaseCommand
 from objects.user import User
 
-__supported_os__ = ["Linux"]
-
 
 class AddSshKey(BaseCommand):
     def __init__(self, username, key, append=True):
         self.username = username
         self.key = key
         self.append = append
-        super().__init__(__supported_os__)
+        super().__init__()
 
     @staticmethod
     def from_user(user: User):

@@ -71,9 +71,11 @@ Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmögl
 ### Unit-Tests werden automatisch ausgeführt
 
 #### Problem
+
 Test mussten einzeln ausgefürht werden.
 
 #### Lösung
+
 Um dies zu vereinfachen, haben wir uns entschieden, dies durch eine `__main__`-Datei zu ersetzten. 
 Die Funktion der Datei beinhaltet, dass alle Dateien im `tests`-Verzeichniss überprüft werden.
 Inhaltende Test werden ausgeführt.
@@ -82,20 +84,24 @@ Somit wurde es vereinheitlicht, daher müssen wir für unseren CI nur einen Behf
 ### Duplizierter Code
 
 #### Problem
+
 Wir haben in den ersten 5 Zeilen eines Codeblockes entdeckt, dass der Code weitestgehend identisch ist.
 
 #### Lösung
+
 Um dieses Problem zu beheben, haben wir eine wietere Klasse namens `BaseObject` hinzugefügt.
 Der Inhalt der Zeilen wird somit vererbt, dadurch sparen wir Code. Außerdem müssen somit weitere Änderungen nur an einer 
 stelle angepasst werden.
 
-### Windows-Unterstützung
+### Windows-Unterstützung für `crypt`
 
 #### Problem
+
 Das Python-Modul `crypt` ist lediglich ein Wrapper für die native [CRYPT(3)](http://man7.org/linux/man-pages/man3/crypt.3.html) Implmentierung in *nix.
 Dies bedeutet, dass der Server zwar auf Windows ausgeführt werden kann, es können jedoch keine Benutzer ausgerollt werden, weil dafür `crypt` erforderlich ist.
 
 #### Lösung
+
 Das erste, was einem auffällt, ist den entsprechenden `UserAdd`-Befehl so anzupassen, dass das Kennwort durch eine Subshell auf dem Client gehasht wird. Dies könnte folgendermaßen aussehen:
 
 ```python
@@ -107,3 +113,19 @@ def get_encrypted_password(self, password):
 Dies würde zwar funktionieren, allerdings müsste in diesem Fall das Kennwort im Plaintext übertragen und ausgeführt werden. Sicherheitstechnisch ist dies keine gute Idee.
 
 Daher haben wir uns für eine reine Python-Implementierung entschieden: `pcrypt`. Da diese laut Entwickler 5 Mal so langsam als die native ist, wird es nur dann verwendet, wenn Letzteres nicht vorhanden ist.
+
+### `__supported_os__` Variable
+
+#### Problem
+
+Da alle Commands `BaseCommand` erben, wird beim Initialisieren (durch `__generate()`) anhand der Variable `__supported_os__` automatisch geprüft, ob diese für das ausführende System geeignet sind.
+
+Dabei wird nicht definiert, ob das System den Befehl ausführen kann, sondern lediglich ob es in der Lage ist, diesen mittels `get_template()` zu generieren.
+
+`__supported_os__` ist eine Variable des jeweiligen Moduls, und wird somit nicht vererbt.
+
+#### Lösung
+
+Durch [obiges Refactoring](#windows-unterstützung-für-crypt) beinhaltet `__supported_os__` für jeden Command die selben Betriebssysteme. Daher wurde `__supported_os__` zu einer Klassen-Variable von `BaseCommand`. Child-Klassen können diese immer noch überschreiben, müssen sie jedoch nicht immer explizit definieren, wenn sie den Standardwert erhalten soll.
+
+Somit sparen wir Codezeilen, sowohl beim jeweiligen Modul, als auch bei der `__init__`-Funktion jeder Command-Klasse.

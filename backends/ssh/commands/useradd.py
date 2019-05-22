@@ -3,8 +3,6 @@ from backends.command import BaseCommand
 from objects.user import User
 from utils.decorators import expect
 
-__supported_os__ = ["Linux"]
-
 
 class UserAdd(BaseCommand):
     @expect(ImportError, "Only UNIX systems support crypt!")
@@ -19,15 +17,15 @@ class UserAdd(BaseCommand):
         self.active = active
         self.pubkey = pubkey
         self.change_pwd_on_first_login = change_pwd_on_first_login
-        from helpers.crypt import crypt
+        from helpers.crypt_helper import crypt
         self._crypt = crypt
         self.salt = crypt.mksalt(crypt.METHOD_SHA512)
-        super().__init__(__supported_os__)
+        super().__init__()
 
     @staticmethod
     def from_user(user: User):
         return UserAdd(first_name=user.firstname, last_name=user.lastname, password=user.password,
-            username=user.username, groups=user.groups, active=(user.state.name == 'present'), pubkey=user.publicKey)
+                       username=user.username, groups=user.groups, active=(user.state.name == 'present'), pubkey=user.publicKey)
 
     def get_error_messages(self):
         return {
@@ -71,13 +69,14 @@ class UserAdd(BaseCommand):
             args["--groups"] = ','.join(g.name for g in grps)
 
         out = cmd.format(options=self.parse_opts(args), username=self.username)
-        
+
         if self.change_pwd_on_first_login:
             # https://unix.stackexchange.com/questions/173708/how-do-i-force-a-user-to-change-a-password-at-the-first-time-login-using-ssh
             out += " && chage -d 0 {username}".format(username=self.username)
 
         if self.pubkey:
-            out += ' && %s' % AddSshKey(username=self.username, key=self.pubkey).get_template()
+            out += ' && %s' % AddSshKey(username=self.username,
+                                        key=self.pubkey).get_template()
         return out
 
     def get_encrypted_password(self, password):

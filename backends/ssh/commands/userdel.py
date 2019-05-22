@@ -1,15 +1,13 @@
 from backends.command import BaseCommand
 from objects.user import User
 
-__supported_os__ = ["Linux"]
-
 
 class UserDel(BaseCommand):
     def __init__(self, username, force=False, remove_home=True):
         self.username = username
         self.force = force
         self.remove_home = remove_home
-        super().__init__(__supported_os__)
+        super().__init__()
 
     @staticmethod
     def from_user(user: User):
