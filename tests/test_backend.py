@@ -16,19 +16,21 @@ class SshCommandTests(unittest.TestCase):
         cmd = user.get()
         self.assertEqual(
             cmd,
-            "useradd '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("hunter2"))
+            "useradd '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(
+                user.get_encrypted_password("hunter2"))
         )
 
     def test_useradd2(self):
-        max_muster = User(State('present'), 'Max', 'Mustermann',
-                          'supersecure', None)
+        max_muster = User(state=State('present'), firstname='Max', lastname='Mustermann',
+                          password='supersecure')
         max_muster.groups = [Group(State('present'), name)
                              for name in ['root', 'www-data']]
         user = UserAdd.from_user(max_muster)
         cmd = user.get()
         self.assertEqual(
             cmd,
-            "useradd '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' '--groups' 'root,www-data' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("supersecure"))
+            "useradd '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' '--groups' 'root,www-data' maxmustermann && chage -d 0 maxmustermann".format(
+                user.get_encrypted_password("supersecure"))
         )
 
     def test_usermod(self):
@@ -37,7 +39,8 @@ class SshCommandTests(unittest.TestCase):
         cmd = user.get()
         self.assertEqual(
             cmd,
-            "usermod '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(user.get_encrypted_password("hunter2"))
+            "usermod '--comment' 'Max Mustermann' '--create-home' '--shell' '/bin/bash' '--password' '{}' maxmustermann && chage -d 0 maxmustermann".format(
+                user.get_encrypted_password("hunter2"))
         )
 
     def test_userdel(self):
