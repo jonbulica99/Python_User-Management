@@ -46,5 +46,3 @@ if __name__ == "__main__":
 
     # start flask
     app.run(**config.parse_section("frontend"))
-
-    # hosts = Host('Ubuntu-TEST01', '172.0.0.45', ssh_jbu), Host('Ubuntu-TEST02', '172.0.0.46', ssh_jbu)
