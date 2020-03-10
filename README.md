@@ -34,40 +34,6 @@ python3 -m unittests
 ```
 Hierfür wird das Python-Modul `unittest` benötigt.
 
-## Aufgabenstellung und Anforderungen
-
-Für die Verwaltung von Nutzern sollen Sie eine Datenbank erstellen und ergmöglichen, dass die Nutzer automatisiert auf einem Linux-Server angelegt werden. Je nach Ausbausstufe soll mehr als ein Server sowie Gruppe und Nuzter konfiguriert werden.
-
-
-### Must have
-
-- [x] Es existiert eine Datenbank, in der Nutzer verwaltet werden.
-- [x] Die Nutzer der Datenbank werden automatisiert in das Linux-Zielsystem eingepflegt. 
-- [x] Für jeden Nutzer wird ein Standardpasswort vergeben. 
-- [x] Der Nutzer wird beim ersten Login aufgefordert, das Passwort zu ändern.
-- [x] Sie haben mindestens drei automatisierte Unit-Tests.  
-- [x] Sie verwenden GIT (oder ein anderes VCS).
-- [x] Sie nutzen Logging.
-
-
-### Should have
-
-- [x] Es existiert eine Datenbank in welcher Nutzer, Gruppen und Server verwaltet werden.
-- [x] Sie verwenden verschiedene Module.
-- [x] Sie verfolgen einen OOP Ansatz.
-- [x] Sie können einen Nutzer auf mindestens zwei Systemen ausrollen.
-- [x] Ein Nutzer kann einer Gruppe zugeordnet werden. 
-- [x] Vor dem Anlegen eines Nutzers oder einer Gruppe wird geprüft, ob der Nutzer oder die Gruppe existiert. Falls der Nutzer oder die Gruppe existiert, wird nicht versucht, den Nutzer oder die Gruppe anzulegen.
-- [x] Sie haben mindestens fünf automatisierte Unit-Tests.
-
-
-### Could have
-
-- [x] Nutzer haben einen Status ("Present", "Deactivatet",  "Deleted"). Entsprechend dem Status ist auf den Zielsystemen der Nutzer vorhanden, deaktiviert oder gelöscht. Beim Löschen soll auch das Homeverzeichnis des Users gelöscht werden.
-- [x] Die öffentlichen SSH-Keys der Nutzer sind in der Datenbank vorhanden und werden beim Anlegen des Nutzers als "authorized keys" auf dem Zielsystem gespeichert.
-- [x] Die Tests werden automatisiert in einer Continous Integration Umgebung ausgeführt.
-- [x] Sie haben einen Integrationstest geschrieben, der z. B. das Linuxsystem oder die Datenbank „mockt“.
-
 ## Refactoring
 
 ### Unit-Tests werden automatisch ausgeführt
