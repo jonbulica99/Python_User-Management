@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.org/jonbulica99/Python_User-Management.svg?branch=master)](https://travis-ci.org/jonbulica99/Python_User-Management)
 [![codebeat badge](https://codebeat.co/badges/85bd7a0a-6d0b-4fcb-ac5b-e8ea9e7f6fa0)](https://codebeat.co/projects/github-com-jonbulica99-python_user-management-master)
 
+
+![Übersicht der Webapp](https://github.com/jonbulica99/Python_User-Management/raw/master/docs/overview.png "Übersicht der Webapp")
 ## Aufsetzung Step-by-Step
 
 1. Repo inkl. Submodule durch Eingabe folgender Befehle klonen:

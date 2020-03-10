@@ -39,10 +39,9 @@ api.add_resource(GroupEndpoint.create(database), '/api/v1/groups/<int:id>')
 api.add_resource(HostEndpoint.create(database), '/api/v1/hosts/<int:id>')
 api.add_resource(CommandEndpoint.create(manager, app), '/api/v1/cmd/<string:command>')
 
+# inject database connection to flask
+database.connect(app)
 
 if __name__ == "__main__":
-    # inject database connection to flask
-    database.connect(app)
-
     # start flask
     app.run(**config.parse_section("frontend"))
